@@ -8,7 +8,7 @@ public class AdditionToNum {
         String userNumber = Utility.Scan();
 
         // check that input is a number
-        if (Utility.checkInt(userNumber)) {
+        if (!Utility.checkInt(userNumber)) {
             if (userNumber.equals("stop")) {
                 return;
             }
@@ -16,6 +16,7 @@ public class AdditionToNum {
             AdditionToNum.main(arg0);
         } else {
             int inputInt = Integer.parseInt(userNumber);
+
             // condition to print out the table A FINIR
             if (inputInt < 0) {
                 Utility.Print("Nombre positif attendu");

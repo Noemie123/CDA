@@ -60,4 +60,16 @@ public class Utility {
 
         return(arg*Utility.Factorial(arg-1));
     }
+
+    public static int findMin (int[] tab) {
+        int min = tab[0];
+
+        for (int i = 1; i < tab.length; i++) {
+            if (tab[i] < min) {
+                min = tab[i];
+            }
+        }
+
+        return min;
+    }
 }
