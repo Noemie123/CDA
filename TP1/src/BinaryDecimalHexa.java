@@ -4,6 +4,40 @@ import java.util.Collections;
 
 public class BinaryDecimalHexa {
 
+    public static void main(String[] arg0) {
+
+        Utility.Print("Nombre d'entrée = Binaire (b), Decimal (d) ou Hexadecimal (h) ? ");
+        String userChoice = Utility.Scan();
+
+        if (userChoice.equals("b")) {
+            Utility.Print("Entrez un nb en binaire");
+            Integer userNumber1 = Utility.ScanInt();
+
+            Utility.Print("Binaire : " + userNumber1);
+            Utility.Print("Decimal : " + binToDeci(userNumber1));
+            Utility.Print("Hexadecimal : " + deciToHexa(Integer.valueOf(binToDeci(userNumber1))));
+
+        } else if (userChoice.equals("d")) {
+            Utility.Print("Entrez un nb en décimal");
+            Integer userNumber2 = Utility.ScanInt();
+
+            Utility.Print("Decimal : " + userNumber2);
+            Utility.Print("Binaire : " + deciToBin(userNumber2));
+            Utility.Print("Hexadecimal : " + deciToHexa(userNumber2));
+
+        } else if (userChoice.equals("h")) {
+            Utility.Print("Entrez un nb en hexadecimal");
+            String userNumber3 = Utility.Scan();
+
+            Utility.Print("Hexadecimal : " + userNumber3);
+            Utility.Print("Decimal : " + hexaToDeci(userNumber3));
+            Utility.Print("Binaire : " + deciToBin(hexaToDeci(userNumber3)));
+
+        } else {
+            BinaryDecimalHexa.main(arg0);
+        }
+    }
+
     private static String binToDeci(Integer nb) {
         int powerTwo = 1;
         int decimal = 0;
@@ -118,81 +152,51 @@ public class BinaryDecimalHexa {
 
 
     // to be done
-    private static String hexaToDeci (String str) {
-        Integer strToInt = null;
+    private static Integer hexaToDeci (String str) {
+        int length = str.length()-1;
 
-        for (int i = 0; i < str.length(); i++) {
+        int correctNb = 0;
+        int finalDeci = 0;
+        int puissance = 0;
+
+        for (int i = length; i >= 0; i--) {
             char letter = str.charAt(i);
-            Integer correctNb;
-            if (Character.toString(letter).matches("[0-9]")) {
-                correctNb = Integer.parseInt(String.valueOf(letter));
-                strToInt += correctNb;
-            } else {
-                switch (letter) {
-                    case 'A':
-                        correctNb = 10;
-                        strToInt += correctNb;
-                        break;
-                    case 'B':
-                        correctNb = 11;
-                        strToInt += correctNb;
-                        break;
-                    case 'C':
-                        correctNb = 12;
-                        strToInt += correctNb;
-                        break;
-                    case 'D':
-                        correctNb = 13;
-                        strToInt += correctNb;
-                        break;
-                    case 'E':
-                        correctNb = 14;
-                        strToInt += correctNb;
-                        break;
-                    case 'F':
-                        correctNb = 15;
-                        strToInt += correctNb;
-                        break;
-                }
+            switch (letter) {
+                case 'A':
+                    correctNb = 10;
+                    break;
+                case 'B':
+                    correctNb = 11;
+                    break;
+                case 'C':
+                    correctNb = 12;
+                    break;
+                case 'D':
+                    correctNb = 13;
+                    break;
+                case 'E':
+                    correctNb = 14;
+                    break;
+                case 'F':
+                    correctNb = 15;
+                    break;
+                default:
+                    correctNb = Integer.parseInt(String.valueOf(letter));
+                    break;
             }
+
+            if (puissance == 0) {
+                finalDeci += correctNb;
+            } else {
+                double hexaPuissance = Math.pow(16, puissance);
+                finalDeci += (correctNb * hexaPuissance);
+            }
+            puissance++;
         }
 
-        return " Res ? " + strToInt;
+        return finalDeci;
 
     }
 
-    public static void main(String[] arg0) {
 
-//        Utility.Print("Nombre d'entrée = Binaire (b), Decimal (d) ou Hexadecimal (h) ? ");
-//        String userChoice = Utility.Scan();
-
-//        Utility.Print("Entrer un nb (bin to deci)");
-//        Integer userNumber1 = Utility.ScanInt();
-//
-//        Utility.PrintNoBreak("La valeur decimale de " + userNumber1 + " est : " + binToDeci(userNumber1) + ".");
-
-//        Utility.Print("Entrer un nb (deci to bin)");
-//        Integer userNumber2 = Utility.ScanInt();
-//
-//        // w/ ternary to check if user input equals 0
-//        Utility.PrintNoBreak("La valeur binaire de " + userNumber2 + " est : " + (userNumber2 == 0 ? userNumber2 : deciToBin(userNumber2)) + ".");
-
-        //        Utility.Print("Entrer un nb (deci to hexa)");
-//        Integer userNumber3 = Utility.ScanInt();
-//
-//        Utility.PrintNoBreak("La valeur hexadécimal de " + userNumber3 + " est : " + deciToHexa(userNumber3) + ".");
-
-
-//        Utility.Print("Entrer un nb (bin to hexa)");
-//        Integer userNumber4 = Utility.ScanInt();
-//
-//        String res = deciToHexa(Integer.parseInt(binToDeci(userNumber4))) ;
-//
-//        Utility.PrintNoBreak("La valeur hexa de " + userNumber4 + " est : " + res + ".");
-
-        Utility.Print("Entrer un nb (hexa to dec)");
-        String userNumber5 = Utility.Scan();
-
-        Utility.PrintNoBreak("La valeur dec de " + userNumber5 + " est : " + hexaToDeci(userNumber5) + ".");
-    }
 }

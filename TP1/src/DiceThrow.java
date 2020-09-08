@@ -17,12 +17,12 @@ public class DiceThrow {
 
 
         // check that input is a number
-        if (Utility.checkInt(userNumber)) {
-            if (userNumber.equals("stop")) {
+        if (!Utility.checkInt(userNumber)) {
+            if (userNumber.equals("0")) {
                 return;
             }
             Utility.Print("Pas un chiffre");
-            Multiplication.main(arg0);
+            DiceThrow.main(arg0);
         } else {
 
             int inputInt = Integer.parseInt(userNumber);
@@ -63,7 +63,8 @@ public class DiceThrow {
 
                 }
 
-                Utility.Print("Le dé a été lancé " + userNumber + " fois. Il est tombé " + uno + " fois sur le 1, " + dos + " fois sur le 2, " + tres + " fois sur le 3, " + cuatro + " fois sur le 4, " + cinco + " fois sur le 5, et " + seis + " fois sur le 6. ");
+                Utility.Print("Le dé a été lancé " + userNumber + " fois.\nIl est tombé " + uno + " fois sur le 1, \n" + dos + " fois sur le 2, \n" + tres + " fois sur le 3, \n" + cuatro + " fois sur le 4, \n" + cinco + " fois sur le 5, \net " + seis + " fois sur le 6. ");
+                DiceThrow.main(arg0);
             }
         }
 

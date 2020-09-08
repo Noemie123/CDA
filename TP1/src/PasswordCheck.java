@@ -43,12 +43,11 @@ public class PasswordCheck {
                     } else {
                         Utility.Print("Les mots de passe ne correspondent pas. Retour.");
                     }
-                    return;
 
                 } else {
                     Utility.Print("Réponse incorrecte");
-                    return;
                 }
+                return;
 
             } else if (userInput.equals(mdp)) {
                 Utility.Print("MDP OK. Session ouverte.");

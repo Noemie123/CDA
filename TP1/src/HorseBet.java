@@ -4,8 +4,8 @@ public class HorseBet {
 
         //X = n ! / (n - p) !
         //Y = n ! / (p ! * (n – p) !)
-        int chanceWinOrder = 0;
-        int chanceWinDisorder = 0;
+        int chanceWinOrder;
+        int chanceWinDisorder;
 
 
         Utility.Print("Nombre de chevaux au départ ?");

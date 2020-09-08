@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.HashMap;
 
 public class TaxTest {
@@ -7,12 +6,12 @@ public class TaxTest {
 // CHECK DONE
 
     // create array for hashmaps
-    public static ArrayList<HashMap> hashList = new ArrayList<HashMap>();
+    public static ArrayList<HashMap> hashList = new ArrayList<>();
 
     public static void main(String[] arg0) {
 
         // Create a HashMap object called capitalCities
-        HashMap<String, String> person = new HashMap<String, String>();
+        HashMap<String, String> person = new HashMap<>();
 
 
         Utility.Print("Entrez le nom ('stop' pour accéder à la liste)");
@@ -37,7 +36,7 @@ public class TaxTest {
                         taxable = " ne paie pas d'impôts.";
                     }
 
-                    Utility.Print(String.valueOf(perso.get("name")) + " est " + genderFinal + " de " + perso.get("age") + " ans. " + pronom + taxable + '\n');
+                    Utility.Print(perso.get("name") + " est " + genderFinal + " de " + perso.get("age") + " ans. " + pronom + taxable + '\n');
                 }
             }
 

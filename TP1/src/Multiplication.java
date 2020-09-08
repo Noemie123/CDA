@@ -8,12 +8,11 @@ public class Multiplication {
         String userInput = Utility.Scan();
 
         // check that input is a number
-        if (Utility.checkInt(userInput)) {
+        if (!Utility.checkInt(userInput)) {
             if (userInput.equals("stop")) {
                 return;
             }
             Utility.Print("Pas un chiffre");
-            Multiplication.main(arg0);
         } else {
             int userNumber = Integer.parseInt(userInput);
 
@@ -23,8 +22,8 @@ public class Multiplication {
                 Utility.Print(ligne);
             }
 
-            Multiplication.main(arg0);
         }
+        Multiplication.main(arg0);
     }
 }
 

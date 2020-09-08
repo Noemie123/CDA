@@ -27,17 +27,15 @@ public class Utility {
     }
 
     public static boolean checkInt(String Arg) {
-        boolean bool = true;
-
         try
         {
            Integer.parseInt(Arg);
         } catch (Exception e)
         {
-            bool = false;
+            return false;
         }
 
-        return bool;
+        return true;
 
     }
 
