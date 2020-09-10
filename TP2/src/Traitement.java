@@ -6,10 +6,63 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-
 public class Traitement {
 
-    private static ArrayList<Person> askUser(ArrayList<Person> persArray) {
+    /**
+     * Method to set the correct price to pay according to color and years of insurance
+     */
+    private static void setPriceToPay(Person personne, String colorSet, Integer fideliteNb) {
+        Integer prixPay = -1;
+
+        switch (colorSet) {
+            case ANSI_RED + "rouge" + ANSI_RESET:
+                prixPay = 200;
+                break;
+            case ANSI_ORANGE + "orange" + ANSI_RESET:
+                prixPay = 150;
+                break;
+            case ANSI_GREEN + "vert" + ANSI_RESET:
+                prixPay = 100;
+                break;
+            case ANSI_BLUE + "bleu" + ANSI_RESET:
+                prixPay = 50;
+                break;
+        }
+
+        if (prixPay != -1) {
+            Integer length = 0;
+            if (fideliteNb > 5) {
+                length = 5;
+            } else {
+                length = fideliteNb;
+            }
+            for (int i = 0; i < length; i++) {
+                prixPay = prixPay - (prixPay*5/100);
+            }
+        }
+
+        personne.setPrixPayer(prixPay);
+    }
+
+
+    /**
+     * Array list to receive persons created by users
+     */
+    private static ArrayList<Person> personArray = new ArrayList<>();
+
+    public static ArrayList<Person> getPersonArray() {
+        return personArray;
+    }
+
+    public static void setPersonArray(ArrayList<Person> personArray) {
+        Traitement.personArray = personArray;
+    }
+
+
+    /**
+     * Recursive method to ask user to create person
+     */
+    private static void askUser() {
         Scanner myObj = new Scanner(System.in);
         System.out.println("Entrez nom");
         String nom = myObj.nextLine();
@@ -29,22 +82,25 @@ public class Traitement {
         System.out.println("Entrez nb années fidélité");
         Integer anneeFidelite = myObj.nextInt();
 
-        Person pers = createPersons(nom, prenom, age, anneePermis, nbAcc, anneeFidelite);
-        persArray.add(pers);
+        Person personToCreate = createPersons(nom, prenom, age, anneePermis, nbAcc, anneeFidelite);
+        giveColor(personToCreate);
+        setPriceToPay(personToCreate, personToCreate.getColor(), personToCreate.getFidelite().getNbAnneeFidelite());
+        Traitement.getPersonArray().add(personToCreate);
 
+        Scanner myObj2 = new Scanner(System.in);
         System.out.println("Pour continuer 'oui' / arreter 'non'");
-        String arret = myObj.nextLine();
+        String arret = myObj2.nextLine();
 
         if (arret.equals("oui")) {
-            askUser(persArray);
-        } else {
-            return persArray;
+            askUser();
         }
-
-        return persArray;
 
     }
 
+
+    /**
+     * Method to create a new person with arguments needed
+     */
     private static Person createPersons(String nom, String prenom, Integer age, Integer nbAnneePermis, Integer nbAccident, Integer nbAnneeFidelite) {
         Person personne = new Person(nom, prenom, age, nbAccident);
 
@@ -59,20 +115,23 @@ public class Traitement {
         return personne;
     }
 
-    private static String giveColor (Integer age, Integer nbAnneePermis, Integer nbAccident, Integer nbAnneeFidelite) {
-        int colorInt = 0;
+    /**
+     * Set color to the person with Person obj as an arg
+     */
+    private static void giveColor(Person perso) {
+        int colorInt;
 
-        if (age < 25) {
-            if (nbAnneePermis < 2) {
-                if (nbAccident == 0) {
+        if (perso.getAge() < 25) {
+            if (perso.getPermis().getNbAnneeObtention() < 2) {
+                if (perso.getNbAccident() == 0) {
                     colorInt = 0;
                 } else {
                     colorInt = -1;
                 }
             } else {
-                if (nbAccident == 0) {
+                if (perso.getNbAccident() == 0) {
                     colorInt = 1;
-                } else if (nbAccident == 1) {
+                } else if (perso.getNbAccident() == 1) {
                     colorInt = 0;
                 } else {
                     colorInt = -1;
@@ -81,20 +140,20 @@ public class Traitement {
 
         } else {
 
-            if (nbAnneePermis < 2) {
-                if (nbAccident == 0) {
+            if (perso.getPermis().getNbAnneeObtention() < 2) {
+                if (perso.getNbAccident() == 0) {
                     colorInt = 1;
-                } else if (nbAccident == 1) {
+                } else if (perso.getNbAccident() == 1) {
                     colorInt = 0;
-                }  else {
+                } else {
                     colorInt = -1;
                 }
             } else {
-                if (nbAccident == 0) {
+                if (perso.getNbAccident() == 0) {
                     colorInt = 2;
-                } else if (nbAccident == 1) {
+                } else if (perso.getNbAccident() == 1) {
                     colorInt = 1;
-                } else if (nbAccident == 2) {
+                } else if (perso.getNbAccident() == 2) {
                     colorInt = 0;
                 } else {
                     colorInt = -1;
@@ -103,7 +162,7 @@ public class Traitement {
 
         }
 
-        if (nbAnneeFidelite > 5) {
+        if (perso.getFidelite().getNbAnneeFidelite() > 5) {
             colorInt++;
         }
 
@@ -126,9 +185,12 @@ public class Traitement {
 
         }
 
-        return color;
+        perso.setColor(color);
     }
 
+    /**
+     * List of colors
+     */
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -136,13 +198,33 @@ public class Traitement {
     public static final String ANSI_BLUE = "\u001B[34m";
 
 
+    /**
+     * Main treatment : asking users and displaying results
+     */
+
     public static void main(String[] arg) {
 
+        //loop to let user create pers
+        askUser();
 
-        ArrayList<Person> arrPersonnes = new ArrayList<>();
+        //getting array created after asking the user to create the persons
+        ArrayList<Person> usersArray = Traitement.getPersonArray();
 
-            //loop to let user create pers
-        askUser(arrPersonnes);
+        // displaying results
+        for (int i = 0; i < usersArray.size(); i++) {
+
+
+            // Strings to display accordingly to the results
+            String inst = usersArray.get(i).getNom() + " " + usersArray.get(i).getPrenom() + ", " + usersArray.get(i).getAge() + " ans, " + usersArray.get(i).getPermis().getNbAnneeObtention() + " ans de permis, " + usersArray.get(i).getNbAccident() + " accident(s), client depuis " + usersArray.get(i).getFidelite().getNbAnneeFidelite() + " ans. ";
+            String inst2;
+            if (usersArray.get(i).getPrixPayer() == -1 && usersArray.get(i).getColor().equals("NA")) {
+                inst2 = "La personne n'est pas assurée.";
+            } else {
+                inst2 = "La personne bénéficie du contrat " + usersArray.get(i).getColor() + " : " + usersArray.get(i).getPrixPayer() + "€.";
+            }
+            System.out.println(inst + inst2);
+        }
+
 
         // first version
 //        Person perso1 = new Person("Bennet", "Jane", 28, 0);

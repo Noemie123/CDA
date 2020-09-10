@@ -1,5 +1,7 @@
 package fr.cda.data;
 
+import java.util.ArrayList;
+
 public class Person {
     private String nom;
     private String prenom;
@@ -7,6 +9,25 @@ public class Person {
     private Integer nbAccident;
     private Permis permis;
     private Fidelite fidelite;
+
+    private String color;
+    private Integer prixPayer;
+
+    public Integer getPrixPayer() {
+        return prixPayer;
+    }
+
+    public void setPrixPayer(Integer prixPayer) {
+        this.prixPayer = prixPayer;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public Person(String nom, String prenom, Integer age, Integer nbAccident) {
         this.nom = nom;
