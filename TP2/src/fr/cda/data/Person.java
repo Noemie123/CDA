@@ -3,16 +3,34 @@ package fr.cda.data;
 import java.util.ArrayList;
 
 public class Person {
+    /**
+     * List of attributes
+     */
     private String nom;
     private String prenom;
     private Integer age;
     private Integer nbAccident;
     private Permis permis;
     private Fidelite fidelite;
-
     private String color;
     private Integer prixPayer;
 
+
+    /**
+     * Constructor
+     */
+
+    public Person(String nom, String prenom, Integer age, Integer nbAccident) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.age = age;
+        this.nbAccident = nbAccident;
+    }
+
+
+    /**
+     * List of getters and letters
+     */
     public Integer getPrixPayer() {
         return prixPayer;
     }
@@ -27,13 +45,6 @@ public class Person {
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-    public Person(String nom, String prenom, Integer age, Integer nbAccident) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.age = age;
-        this.nbAccident = nbAccident;
     }
 
     public String getNom() {

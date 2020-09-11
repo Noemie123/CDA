@@ -14,30 +14,32 @@ public class Traitement {
     private static void setPriceToPay(Person personne, String colorSet, Integer fideliteNb) {
         Integer prixPay = -1;
 
-        switch (colorSet) {
-            case ANSI_RED + "rouge" + ANSI_RESET:
-                prixPay = 200;
-                break;
-            case ANSI_ORANGE + "orange" + ANSI_RESET:
-                prixPay = 150;
-                break;
-            case ANSI_GREEN + "vert" + ANSI_RESET:
-                prixPay = 100;
-                break;
-            case ANSI_BLUE + "bleu" + ANSI_RESET:
-                prixPay = 50;
-                break;
-        }
-
-        if (prixPay != -1) {
-            Integer length = 0;
-            if (fideliteNb > 5) {
-                length = 5;
-            } else {
-                length = fideliteNb;
+        if (!personne.getColor().equals("NA")) {
+            switch (colorSet) {
+                case ANSI_RED + "rouge" + ANSI_RESET:
+                    prixPay = 200;
+                    break;
+                case ANSI_ORANGE + "orange" + ANSI_RESET:
+                    prixPay = 150;
+                    break;
+                case ANSI_GREEN + "vert" + ANSI_RESET:
+                    prixPay = 100;
+                    break;
+                case ANSI_BLUE + "bleu" + ANSI_RESET:
+                    prixPay = 50;
+                    break;
             }
-            for (int i = 0; i < length; i++) {
-                prixPay = prixPay - (prixPay*5/100);
+
+            if (prixPay != -1) {
+                Integer length = 0;
+                if (fideliteNb > 5) {
+                    length = 5;
+                } else {
+                    length = fideliteNb;
+                }
+                for (int i = 0; i < length; i++) {
+                    prixPay = prixPay - (prixPay * 5 / 100);
+                }
             }
         }
 
@@ -88,10 +90,10 @@ public class Traitement {
         Traitement.getPersonArray().add(personToCreate);
 
         Scanner myObj2 = new Scanner(System.in);
-        System.out.println("Pour continuer 'oui' / arreter 'non'");
+        System.out.println("Pour continuer 'o'");
         String arret = myObj2.nextLine();
 
-        if (arret.equals("oui")) {
+        if (arret.equals("o")) {
             askUser();
         }
 
