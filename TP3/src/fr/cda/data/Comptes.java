@@ -7,7 +7,7 @@ public class Comptes {
     /**
      * Attributes
      */
-    protected Integer code;
+    protected String code;
     protected Double solde;
     private Integer type;
 
@@ -17,7 +17,7 @@ public class Comptes {
     /**
      * Constructor
      */
-    public Comptes (Integer code, Double solde) {
+    public Comptes (String code, Double solde) {
         this.code = code;
         this.solde = solde;
     }
@@ -34,11 +34,11 @@ public class Comptes {
         this.operationsArrayList = operationsArrayList;
     }
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -65,8 +65,8 @@ public class Comptes {
      */
     public static void createAccount(ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants, ArrayList<Epargnes> arrayComptesEpargnes ) {
         Scanner myObj = new Scanner(System.in);
-        System.out.println("Code du compte");
-        Integer codeCompte = myObj.nextInt();
+        System.out.println("N° du compte");
+        String codeCompte = myObj.next();
 
         System.out.println("Courant(1) ou Epargne(2) ?");
         Integer userChoice = myObj.nextInt();
@@ -93,5 +93,48 @@ public class Comptes {
             createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
         }
 
+    }
+
+
+    /**
+     * Method to find index of account in global array
+     */
+
+    public static Integer findIndex(ArrayList<Comptes> arr, String numeroCompte) {
+
+        for (int i = 0; i < arr.size(); i++) {
+
+                if (arr.get(i).getCode().equals(numeroCompte)) {
+                    return i;
+                }
+
+        }
+        return -1;
+    }
+
+
+    public static Integer findIndexCourants(ArrayList<Courants> arr, String numeroCompte) {
+
+        for (int i = 0; i < arr.size(); i++) {
+
+            if (arr.get(i).getCode().equals(numeroCompte)) {
+                return i;
+            }
+
+        }
+        return -1;
+    }
+
+
+    public static Integer findIndexEpargnes(ArrayList<Epargnes> arr,String numeroCompte) {
+
+        for (int i = 0; i < arr.size(); i++) {
+
+            if (arr.get(i).getCode().equals(numeroCompte)) {
+                return i;
+            }
+
+        }
+        return -1;
     }
 }
