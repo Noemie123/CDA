@@ -12,7 +12,7 @@ public class Operations {
      * Attributes
      */
     private Integer numero;
-    private String date;
+    private Date date;
     private Double montant;
     private String type;
 
@@ -28,11 +28,11 @@ public class Operations {
         this.numero = numero;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -56,10 +56,8 @@ public class Operations {
 
     public static void saveOperation(Comptes compteChoisi, Double montant, String type) {
         // date of today
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-        String todayDate = dateFormat.format(date);
+        Date date = new Date();
+
 
         // operation number equals position of operation in arrayList
         Integer operationNumber = compteChoisi.getOperationsArrayList().size()+1;
@@ -67,7 +65,7 @@ public class Operations {
 
         // save operations into array
         Operations op = new Operations();
-        op.setDate(todayDate);
+        op.setDate(date);
         op.setMontant(montant);
         op.setNumero(operationNumber);
         op.setType(type);

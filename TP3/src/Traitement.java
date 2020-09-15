@@ -3,12 +3,18 @@ import fr.cda.data.Courants;
 import fr.cda.data.Epargnes;
 import fr.cda.data.Operations;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 
 public class Traitement {
 
+    private static final DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Method to display the list of withdrawal and total amount of withdrawal of a selected account
@@ -29,7 +35,7 @@ public class Traitement {
 
             for (Operations operations : operationArray) {
                 if (operations.getType().equals("retrait") || operations.getType().equals("virement / retrait")) {
-                    System.out.println("Op n°" + operations.getNumero() + " ---- " + operations.getDate() + " - " + operations.getType() + " de " + operations.getMontant() + "€.");
+                    System.out.println("Op n°" + operations.getNumero() + " ---- " + format.format(operations.getDate()) + " - " + operations.getType() + " de " + operations.getMontant() + "€.");
                     montant += operations.getMontant();
                 }
             }
@@ -66,7 +72,7 @@ public class Traitement {
 
             for (Operations operations : operationArray) {
                 if (operations.getType().equals("versement") || operations.getType().equals("virement / versement")) {
-                    System.out.println("Op n°" + operations.getNumero() + " ---- " + operations.getDate() + " - " + operations.getType() + " de " + operations.getMontant() + "€.");
+                    System.out.println("Op n°" + operations.getNumero() + " ---- " + format.format(operations.getDate()) + " - " + operations.getType() + " de " + operations.getMontant() + "€.");
                     montant += operations.getMontant();
                 }
             }
@@ -100,7 +106,7 @@ public class Traitement {
             System.out.println("Liste des opérations du compte n° " + compte.getCode());
 
             for (Operations operations : operationArray) {
-                System.out.println("Op n°" + operations.getNumero() + " ---- " + operations.getDate() + " - " + operations.getType() + " de " + operations.getMontant() + "€.");
+                System.out.println("Op n°" + operations.getNumero() + " ---- " + format.format(operations.getDate()) + " - " + operations.getType() + " de " + operations.getMontant() + "€.");
             }
 
             System.out.println("---------------------------------------------------------");
