@@ -1,9 +1,6 @@
 package fr.cda.data;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -54,7 +51,7 @@ public class Operations {
 
 
 
-    public static void saveOperation(Comptes compteChoisi, Double montant, String type) {
+    private static void saveOperation(Comptes compteChoisi, Double montant, String type) {
         // date of today
         Date date = new Date();
 

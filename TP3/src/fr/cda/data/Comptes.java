@@ -9,9 +9,9 @@ public class Comptes {
      */
     protected String code;
     protected Double solde;
-    private Integer type;
+    protected Integer type;
 
-    private ArrayList<Operations> operationsArrayList = new ArrayList<>();
+    protected ArrayList<Operations> operationsArrayList = new ArrayList<>();
 
 
     /**

@@ -19,7 +19,7 @@ public class Traitement {
     /**
      * Method to display the list of withdrawal and total amount of withdrawal of a selected account
      */
-    public static void displayAmountRetrait() {
+    private static void displayAmountRetrait() {
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte");
         String numeroCompte = myObj.next();
@@ -56,7 +56,7 @@ public class Traitement {
     /**
      * Method to display the list of transfers and total amount of transfers on a selected account
      */
-    public static void displayAmountVersement() {
+    private static void displayAmountVersement() {
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte");
         String numeroCompte = myObj.next();
@@ -93,7 +93,7 @@ public class Traitement {
     /**
      * Method to display list of operations of a selected account
      */
-    public static void displayOperations() {
+    private static void displayOperations() {
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte");
         String numeroCompte = myObj.next();
@@ -119,7 +119,7 @@ public class Traitement {
     /**
      * Method to display list of accounts
      */
-    public static void displayAccount() {
+    private static void displayAccount() {
 
         for (int i = 0; i < arrayComptes.size(); i++) {
             if (arrayComptes.get(i).getType() == 1) {
@@ -145,7 +145,7 @@ public class Traitement {
     /**
      * Method to display menu list of possibilities
      */
-    public static Integer displayMenu() {
+    private static Integer displayMenu() {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
         System.out.println("1. Créer un compte");
