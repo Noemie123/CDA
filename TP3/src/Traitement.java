@@ -89,7 +89,7 @@ public class Traitement {
      */
     public static void displayOperations() {
         Scanner myObj = new Scanner(System.in);
-        System.out.println("Index du compte");
+        System.out.println("N° du compte");
         String numeroCompte = myObj.next();
         Integer indexCompte = Comptes.findIndex(arrayComptes, numeroCompte);
 
@@ -153,7 +153,7 @@ public class Traitement {
         System.out.println("9. Consulter le total des montants des versements");
         System.out.println("10. Consulter le total des montants des retraits");
 
-        System.out.println("Chosir une option (Pour arrêter = 0)");
+        System.out.println("Choisir une option (Pour arrêter = 0)");
 
         return myObj.nextInt();
     }
@@ -213,6 +213,10 @@ public class Traitement {
                 displayAccount();
                 displayAmountRetrait();
                 break;
+            default:
+                if (userChoiceMenu != 0) {
+                    System.out.println("Choix incorrect. Veuillez recommencer.");
+                }
         }
 
         if (userChoiceMenu != 0) {

@@ -68,28 +68,35 @@ public class Comptes {
         System.out.println("N° du compte");
         String codeCompte = myObj.next();
 
-        System.out.println("Courant(1) ou Epargne(2) ?");
-        Integer userChoice = myObj.nextInt();
+        Integer indexFound = findIndex(arrayComptes, codeCompte);
 
-        if (userChoice == 1) {
-            Courants compteCourant = new Courants(codeCompte, 0.0, -150.0);
-            compteCourant.setType(userChoice);
-            arrayComptesCourants.add(compteCourant);
-            arrayComptes.add(compteCourant);
-        } else if (userChoice == 2) {
-            Epargnes compteEpargne = new Epargnes(codeCompte, 0.0, 2.5);
-            compteEpargne.setType(userChoice);
-            arrayComptesEpargnes.add(compteEpargne);
-            arrayComptes.add(compteEpargne);
+        if (indexFound == -1) {
+            System.out.println("Courant(1) ou Epargne(2) ?");
+            Integer userChoice = myObj.nextInt();
+
+            if (userChoice == 1) {
+                Courants compteCourant = new Courants(codeCompte, 0.0, -150.0);
+                compteCourant.setType(userChoice);
+                arrayComptesCourants.add(compteCourant);
+                arrayComptes.add(compteCourant);
+            } else if (userChoice == 2) {
+                Epargnes compteEpargne = new Epargnes(codeCompte, 0.0, 2.5);
+                compteEpargne.setType(userChoice);
+                arrayComptesEpargnes.add(compteEpargne);
+                arrayComptes.add(compteEpargne);
+            } else {
+                createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
+            }
+
+            Scanner myObj2 = new Scanner(System.in);
+            System.out.println("Continuer ? (o pour oui)");
+            String continueAnswer = myObj2.nextLine();
+
+            if (continueAnswer.equals("o")) {
+                createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
+            }
         } else {
-            createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
-        }
-
-        Scanner myObj2 = new Scanner(System.in);
-        System.out.println("Continuer ? (o pour oui)");
-        String continueAnswer = myObj2.nextLine();
-
-        if (continueAnswer.equals("o")) {
+            System.out.println("Le compte existe déjà.");
             createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
         }
 
