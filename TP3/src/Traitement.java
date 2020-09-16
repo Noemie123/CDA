@@ -120,13 +120,13 @@ public class Traitement {
      * Method to display list of accounts
      */
     private static void displayAccount() {
-
+        String displayAccounts = "";
         for (int i = 0; i < arrayComptes.size(); i++) {
             if (arrayComptes.get(i).getType() == 1) {
                 Integer indexCourant = Comptes.findIndexCourants(arrayComptesCourants, arrayComptes.get(i).getCode());
                 String solde = arrayComptes.get(i).getSolde() < 0 ? "\u001B[31m" + arrayComptes.get(i).getSolde() + "€" + "\u001B[0m" : arrayComptes.get(i).getSolde() + "€";
-                String displayAccounts = "Compte Courant n°" + arrayComptes.get(i).getCode() + " - solde de " + solde + ". Découvert = " + arrayComptesCourants.get(indexCourant).getDecouvert() + "€.";
-                System.out.println(displayAccounts);
+                displayAccounts = "Compte Courant n°" + arrayComptes.get(i).getCode() + " - solde de " + solde + ". Découvert autorisé = " + arrayComptesCourants.get(indexCourant).getDecouvert() + "€.";
+
             } else {
                 Integer indexEpargne = Comptes.findIndexEpargnes(arrayComptesEpargnes, arrayComptes.get(i).getCode());
                 // adding interest whenever account is displayed
@@ -134,10 +134,13 @@ public class Traitement {
                 arrayComptesEpargnes.get(indexEpargne).setSolde(solde);
 
                 // adding the saving account in the general account array and displaying
-                String displayAccounts = "Compte Épargne n°" + arrayComptes.get(i).getCode() + " - solde de " + arrayComptes.get(i).getSolde() + "€. Taux d'intérêts = " + arrayComptesEpargnes.get(indexEpargne).getTauxInteret() + "%.";
-                System.out.println(displayAccounts);
+                displayAccounts = "Compte Épargne n°" + arrayComptes.get(i).getCode() + " - solde de " + arrayComptes.get(i).getSolde() + "€. Taux d'intérêts = " + arrayComptesEpargnes.get(indexEpargne).getTauxInteret() + "%.";
+
             }
+
+            System.out.println(displayAccounts);
         }
+
         System.out.println("---------------------------------------------------------");
     }
 

@@ -195,6 +195,9 @@ public class Operations {
                 if (indexCompteChoisi2 == -1) {
                     System.out.println("Compte introuvable.");
                     virement(arrayComptes, arrayComptesCourants);
+                } else if (indexCompteChoisi.equals(indexCompteChoisi2)) {
+                    System.out.println("Vous ne pouvez pas effectuer de virement sur votre propre compte.");
+                    virement(arrayComptes, arrayComptesCourants);
                 } else {
 
                     System.out.println("Montant de virement");
