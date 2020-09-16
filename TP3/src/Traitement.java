@@ -1,7 +1,4 @@
-import fr.cda.data.Comptes;
-import fr.cda.data.Courants;
-import fr.cda.data.Epargnes;
-import fr.cda.data.Operations;
+import fr.cda.data.*;
 
 import java.text.DateFormat;
 import java.text.FieldPosition;
@@ -10,6 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+
+import static fr.cda.data.Users.createUser;
+import static fr.cda.data.Users.findIndexUser;
 
 
 public class Traitement {
@@ -145,6 +145,7 @@ public class Traitement {
     }
 
 
+
     /**
      * Method to display menu list of possibilities
      */
@@ -169,66 +170,142 @@ public class Traitement {
 
 
     /**
+     * Method to check before connect
+     */
+
+    private static boolean checkConnect() {
+        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+        boolean correctMdp = false;
+
+        System.out.println("Identifiant ?");
+        String identifiantInput = myObj.next();
+        Integer indexUser = findIndexUser(arrayUsers, identifiantInput);
+
+        System.out.println("Mot de passe ?");
+        String mdpInput = myObj.next();
+        String saveMdp = indexUser == -1 ? "notFound" : arrayUsers.get(indexUser).getMotDePasse();
+
+        if (saveMdp.equals(mdpInput)) {
+            correctMdp = true;
+        }
+
+        if (indexUser != -1 && correctMdp) {
+            System.out.println("Connexion réussie.");
+            return true;
+        } else {
+            System.out.println("Identifiants incorrects.");
+        }
+
+
+        return false;
+    }
+
+
+    /**
+     * Method to display menu list of possibilities
+     */
+    private static boolean displayBaseMenu() {
+        // base menu
+        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+
+        System.out.println("1. Créer un utilisateur.");
+        System.out.println("2. Se connecter.");
+        Integer choixMenu = myObj.nextInt();
+
+        if (choixMenu == 1) {
+            createUser(arrayUsers);
+            System.out.println(arrayUsers.get(0).getIdentifiant() + ", vous pouvez maintenant vous connecter.");
+        } else if (choixMenu == 2 && arrayUsers.size() <=0) {
+            System.out.println("Veuillez créer au moins un utilisateur.");
+        } else if (choixMenu == 2) {
+            System.out.println("espace connexion");
+            return checkConnect();
+        }
+
+        return false;
+    }
+
+    /**
      * List of arrayLists needed for main to function
      */
     private static final ArrayList<Courants> arrayComptesCourants = new ArrayList<>();
     private static final ArrayList<Epargnes> arrayComptesEpargnes = new ArrayList<>();
     private static final ArrayList<Comptes> arrayComptes = new ArrayList<>();
+    private static final ArrayList<Users> arrayUsers = new ArrayList<>();
 
     public static void main(String[] arg) {
-        Integer userChoiceMenu = displayMenu();
+        boolean isIdentified = true;
+        String[] argTable = new String[1];
 
-        if (arrayComptes.isEmpty() && userChoiceMenu !=1) {
-            System.out.println("Veuillez créer un compte.");
-            Traitement.main(arg);
+
+        if (argTable[0] == null || !argTable[0].equals("in")) {
+            isIdentified = displayBaseMenu();
         }
 
-        switch (userChoiceMenu) {
-            case 1:
-                Comptes.createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
-                break;
-            case 2:
-                displayAccount();
-                Operations.versement(arrayComptes);
-                break;
-            case 3:
-                displayAccount();
-                Operations.retrait(arrayComptes, arrayComptesCourants);
-                break;
-            case 4:
-                displayAccount();
-                Operations.virement(arrayComptes, arrayComptesCourants);
-                break;
-            case 5:
-                displayAccount();
-                break;
-            case 6:
-                displayAccount();
-                Operations.changeInterest(arrayComptes, arrayComptesEpargnes);
-                break;
-            case 7:
-                displayAccount();
-                Operations.changeOverdraft(arrayComptes, arrayComptesCourants);
-                break;
-            case 8:
-                displayAccount();
-                displayOperations();
-                break;
-            case 9:
-                displayAccount();
-                displayAmountVersement();
-                break;
-            case 10:
-                displayAccount();
-                displayAmountRetrait();
-                break;
-            default:
-                if (userChoiceMenu != 0) {
-                    System.out.println("Choix incorrect. Veuillez recommencer.");
-                }
-        }
 
-        if (userChoiceMenu != 0) {
+        if (isIdentified) {
+            argTable[0] = "in";
+            Integer userChoiceMenu = displayMenu();
+
+            if (userChoiceMenu != 0 && arrayComptes.isEmpty() && userChoiceMenu != 1) {
+                System.out.println("Veuillez créer un compte.");
+                Traitement.main(argTable);
+            }
+
+            switch (userChoiceMenu) {
+                case 0:
+                    System.out.println("Vous êtes déconnecté.");
+                    argTable[0] = "out";
+                    Traitement.main(arg);
+                case 1:
+                    Comptes.createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
+                    break;
+                case 2:
+                    displayAccount();
+                    Operations.versement(arrayComptes);
+                    break;
+                case 3:
+                    displayAccount();
+                    Operations.retrait(arrayComptes, arrayComptesCourants);
+                    break;
+                case 4:
+                    displayAccount();
+                    Operations.virement(arrayComptes, arrayComptesCourants);
+                    break;
+                case 5:
+                    displayAccount();
+                    break;
+                case 6:
+                    displayAccount();
+                    Operations.changeInterest(arrayComptes, arrayComptesEpargnes);
+                    break;
+                case 7:
+                    displayAccount();
+                    Operations.changeOverdraft(arrayComptes, arrayComptesCourants);
+                    break;
+                case 8:
+                    displayAccount();
+                    displayOperations();
+                    break;
+                case 9:
+                    displayAccount();
+                    displayAmountVersement();
+                    break;
+                case 10:
+                    displayAccount();
+                    displayAmountRetrait();
+                    break;
+                default:
+                    if (userChoiceMenu != 0) {
+                        System.out.println("Choix incorrect. Veuillez recommencer.");
+                    }
+            }
+
+            if (userChoiceMenu != 0) {
+                Traitement.main(argTable);
+            }
+
+        } else {
             Traitement.main(arg);
         }
 

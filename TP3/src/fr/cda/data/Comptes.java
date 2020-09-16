@@ -11,6 +11,7 @@ public class Comptes {
     protected Double solde;
     protected Integer type;
 
+//    protected ArrayList<Comptes> comptesArrayList = new ArrayList();
     protected ArrayList<Operations> operationsArrayList = new ArrayList<>();
 
 
@@ -20,6 +21,7 @@ public class Comptes {
     public Comptes (String code, Double solde) {
         this.code = code;
         this.solde = solde;
+//        comptesArrayList.add(this);
     }
 
 
