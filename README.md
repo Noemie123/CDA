@@ -1,7 +1,7 @@
 # CDA
 
-## TP1
-Algo : exercizes & games
+## TP1 -- Algo
+Algo : exo & games
 
 ## TP2
 POO : driver licence / Insurance calculation
