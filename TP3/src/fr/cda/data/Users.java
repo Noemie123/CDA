@@ -12,7 +12,7 @@ public class Users {
     protected String identifiant;
     protected String motDePasse;
 
-    protected ArrayList<Comptes> comptesUserList = new ArrayList<>();
+
 
 
     /**
@@ -62,13 +62,6 @@ public class Users {
         this.motDePasse = motDePasse;
     }
 
-    public ArrayList<Comptes> getComptesUserList() {
-        return comptesUserList;
-    }
-
-    public void setComptesUserList(ArrayList<Comptes> comptesUserList) {
-        this.comptesUserList = comptesUserList;
-    }
 
 
 

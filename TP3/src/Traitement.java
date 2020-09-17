@@ -119,26 +119,33 @@ public class Traitement {
     /**
      * Method to display list of accounts
      */
-    private static void displayAccount() {
+    private static void displayAccount(Integer indexCurrentUser) {
         String displayAccounts = "";
         for (int i = 0; i < arrayComptes.size(); i++) {
-            if (arrayComptes.get(i).getType() == 1) {
-                Integer indexCourant = Comptes.findIndexCourants(arrayComptesCourants, arrayComptes.get(i).getCode());
-                String solde = arrayComptes.get(i).getSolde() < 0 ? "\u001B[31m" + arrayComptes.get(i).getSolde() + "€" + "\u001B[0m" : arrayComptes.get(i).getSolde() + "€";
-                displayAccounts = "Compte Courant n°" + arrayComptes.get(i).getCode() + " - solde de " + solde + ". Découvert autorisé = " + arrayComptesCourants.get(indexCourant).getDecouvert() + "€.";
+            if (arrayComptes.get(i).getIndexUser() == indexCurrentUser) {
+                if (arrayComptes.get(i).getType() == 1) {
+                    Integer indexCourant = Comptes.findIndexCourants(arrayComptesCourants, arrayComptes.get(i).getCode());
+                    String solde = arrayComptes.get(i).getSolde() < 0 ? "\u001B[31m" + arrayComptes.get(i).getSolde() + "€" + "\u001B[0m" : arrayComptes.get(i).getSolde() + "€";
+                    displayAccounts = "Compte Courant n°" + arrayComptes.get(i).getCode() + " - solde de " + solde + ". Découvert autorisé = " + arrayComptesCourants.get(indexCourant).getDecouvert() + "€.";
 
-            } else {
-                Integer indexEpargne = Comptes.findIndexEpargnes(arrayComptesEpargnes, arrayComptes.get(i).getCode());
-                // adding interest whenever account is displayed
-                Double solde = Math.floor(arrayComptesEpargnes.get(indexEpargne).getSolde() + (arrayComptesEpargnes.get(indexEpargne).getSolde() * arrayComptesEpargnes.get(indexEpargne).getTauxInteret()/100));
-                arrayComptesEpargnes.get(indexEpargne).setSolde(solde);
+                } else {
+                    Integer indexEpargne = Comptes.findIndexEpargnes(arrayComptesEpargnes, arrayComptes.get(i).getCode());
+                    // adding interest whenever account is displayed
+                    Double solde = Math.floor(arrayComptesEpargnes.get(indexEpargne).getSolde() + (arrayComptesEpargnes.get(indexEpargne).getSolde() * arrayComptesEpargnes.get(indexEpargne).getTauxInteret() / 100));
+                    arrayComptesEpargnes.get(indexEpargne).setSolde(solde);
 
-                // adding the saving account in the general account array and displaying
-                displayAccounts = "Compte Épargne n°" + arrayComptes.get(i).getCode() + " - solde de " + arrayComptes.get(i).getSolde() + "€. Taux d'intérêts = " + arrayComptesEpargnes.get(indexEpargne).getTauxInteret() + "%.";
+                    // adding the saving account in the general account array and displaying
+                    displayAccounts = "Compte Épargne n°" + arrayComptes.get(i).getCode() + " - solde de " + arrayComptes.get(i).getSolde() + "€. Taux d'intérêts = " + arrayComptesEpargnes.get(indexEpargne).getTauxInteret() + "%.";
 
-            }
+                }
 
             System.out.println(displayAccounts);
+            }
+
+        }
+
+        if (displayAccounts.length() == 0) {
+            System.out.println("Aucun compte à afficher");
         }
 
         System.out.println("---------------------------------------------------------");
@@ -173,7 +180,7 @@ public class Traitement {
      * Method to check before connect
      */
 
-    private static boolean checkConnect() {
+    private static Integer checkConnect() {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         boolean correctMdp = false;
 
@@ -191,20 +198,20 @@ public class Traitement {
 
         if (indexUser != -1 && correctMdp) {
             System.out.println("Connexion réussie.");
-            return true;
+            return indexUser;
         } else {
             System.out.println("Identifiants incorrects.");
         }
 
 
-        return false;
+        return -1;
     }
 
 
     /**
      * Method to display menu list of possibilities
      */
-    private static boolean displayBaseMenu() {
+    private static Integer displayBaseMenu() {
         // base menu
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
@@ -214,7 +221,8 @@ public class Traitement {
 
         if (choixMenu == 1) {
             createUser(arrayUsers);
-            System.out.println(arrayUsers.get(0).getIdentifiant() + ", vous pouvez maintenant vous connecter.");
+            Integer indexCurr = arrayUsers.size()-1;
+            System.out.println(arrayUsers.get(indexCurr).getIdentifiant() + ", vous pouvez maintenant vous connecter.");
         } else if (choixMenu == 2 && arrayUsers.size() <=0) {
             System.out.println("Veuillez créer au moins un utilisateur.");
         } else if (choixMenu == 2) {
@@ -222,7 +230,7 @@ public class Traitement {
             return checkConnect();
         }
 
-        return false;
+        return -1;
     }
 
     /**
@@ -236,16 +244,17 @@ public class Traitement {
     private static final String[] argTable = new String[1];
 
     public static void main(String[] arg) {
-        boolean isIdentified = true;
+        Integer isIdentified;
 
-
-        if (argTable[0] == null || !argTable[0].equals("in")) {
+        if (arg.length == 0 || arg[0] == null || arg[0].equals("out")) {
             isIdentified = displayBaseMenu();
+        } else {
+            isIdentified = Integer.parseInt(arg[0]);
         }
 
 
-        if (isIdentified) {
-            argTable[0] = "in";
+        if (isIdentified != -1) {
+            argTable[0] = String.valueOf(isIdentified);
             Integer userChoiceMenu = displayMenu();
 
             if (userChoiceMenu != 0 && (arrayComptes.isEmpty() && userChoiceMenu != 1)) {
@@ -257,43 +266,43 @@ public class Traitement {
                 case 0:
                     System.out.println("Vous êtes déconnecté.");
                     argTable[0] = "out";
-                    Traitement.main(arg);
+                    Traitement.main(argTable);
                 case 1:
-                    Comptes.createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
+                    Comptes.createAccount(isIdentified, arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
                     break;
                 case 2:
-                    displayAccount();
-                    Operations.versement(arrayComptes);
+                    displayAccount(isIdentified);
+                    Operations.versement(arrayComptes, isIdentified);
                     break;
                 case 3:
-                    displayAccount();
-                    Operations.retrait(arrayComptes, arrayComptesCourants);
+                    displayAccount(isIdentified);
+                    Operations.retrait(arrayComptes, arrayComptesCourants, isIdentified);
                     break;
                 case 4:
-                    displayAccount();
-                    Operations.virement(arrayComptes, arrayComptesCourants);
+                    displayAccount(isIdentified);
+                    Operations.virement(arrayComptes, arrayComptesCourants, isIdentified);
                     break;
                 case 5:
-                    displayAccount();
+                    displayAccount(isIdentified);
                     break;
                 case 6:
-                    displayAccount();
-                    Operations.changeInterest(arrayComptes, arrayComptesEpargnes);
+                    displayAccount(isIdentified);
+                    Operations.changeInterest(arrayComptes, arrayComptesEpargnes, isIdentified);
                     break;
                 case 7:
-                    displayAccount();
-                    Operations.changeOverdraft(arrayComptes, arrayComptesCourants);
+                    displayAccount(isIdentified);
+                    Operations.changeOverdraft(arrayComptes, arrayComptesCourants, isIdentified);
                     break;
                 case 8:
-                    displayAccount();
+                    displayAccount(isIdentified);
                     displayOperations();
                     break;
                 case 9:
-                    displayAccount();
+                    displayAccount(isIdentified);
                     displayAmountVersement();
                     break;
                 case 10:
-                    displayAccount();
+                    displayAccount(isIdentified);
                     displayAmountRetrait();
                     break;
                 default:
@@ -306,7 +315,7 @@ public class Traitement {
             }
 
         } else {
-            Traitement.main(arg);
+            Traitement.main(argTable);
         }
 
     }

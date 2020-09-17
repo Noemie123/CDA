@@ -11,8 +11,8 @@ public class Epargnes extends Comptes {
     /**
      * Constructor
      */
-    public Epargnes (String code, Double solde, Double tauxInteret) {
-        super (code, solde);
+    public Epargnes (String code, Double solde, Integer type, Integer indexUser, Double tauxInteret) {
+        super (code, solde, type, indexUser);
         this.tauxInteret = tauxInteret;
     }
 

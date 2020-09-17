@@ -75,7 +75,7 @@ public class Operations {
      * Method to credit a selected account of an amount given by user
      * Including saving operations into an array
      */
-    public static void versement(ArrayList<Comptes> arrayComptes) {
+    public static void versement(ArrayList<Comptes> arrayComptes, Integer indexUser) {
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte");
         String numeroCompteChoisi = myObj.next();
@@ -83,20 +83,25 @@ public class Operations {
 
 
         if (indexCompteChoisi != -1) {
-            System.out.println("Montant de versement");
-            Double montantVersement = myObj.nextDouble();
+            if (arrayComptes.get(indexCompteChoisi).getIndexUser() != indexUser) {
+                System.out.println("Compte indisponible.");
+            } else {
 
-            Comptes compteChoisi = arrayComptes.get(indexCompteChoisi);
-            Double soldePrecedent = compteChoisi.getSolde();
-            String soldePrec = soldePrecedent < 0 ? "\u001B[31m" + soldePrecedent + "€" + "\u001B[0m" : soldePrecedent + "€";
-            compteChoisi.setSolde(soldePrecedent + montantVersement);
-            Double nouveauSolde = compteChoisi.getSolde();
+                System.out.println("Montant de versement");
+                Double montantVersement = myObj.nextDouble();
 
-            // saving operation
-            saveOperation(compteChoisi, montantVersement, "versement");
+                Comptes compteChoisi = arrayComptes.get(indexCompteChoisi);
+                Double soldePrecedent = compteChoisi.getSolde();
+                String soldePrec = soldePrecedent < 0 ? "\u001B[31m" + soldePrecedent + "€" + "\u001B[0m" : soldePrecedent + "€";
+                compteChoisi.setSolde(soldePrecedent + montantVersement);
+                Double nouveauSolde = compteChoisi.getSolde();
+
+                // saving operation
+                saveOperation(compteChoisi, montantVersement, "versement");
 
 
-            System.out.println("Le compte a bien été crédité de " + montantVersement + "€. Nouveau solde : " + nouveauSolde + "€ (ancien : " + soldePrec + ").");
+                System.out.println("Le compte a bien été crédité de " + montantVersement + "€. Nouveau solde : " + nouveauSolde + "€ (ancien : " + soldePrec + ").");
+            }
         } else {
             System.out.println("Le compte n'existe pas.");
         }
@@ -109,59 +114,65 @@ public class Operations {
      * Method to debit a selected account of an amount given by user - checking if withdrawal is possible (overdraft)
      * Including saving operations into an array
      */
-    public static void retrait(ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants) {
+    public static void retrait(ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants, Integer indexUser) {
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte");
         String numeroCompte = myObj.next();
         Integer indexCompteChoisi = Comptes.findIndex(arrayComptes, numeroCompte);
 
         if (indexCompteChoisi != -1) {
-            System.out.println("Montant à débiter");
-            Double montantRetrait = myObj.nextDouble();
 
-            Comptes compteChoisi = arrayComptes.get(indexCompteChoisi);
-            Double soldePrecedent = compteChoisi.getSolde();
+            if (arrayComptes.get(indexCompteChoisi).getIndexUser() != indexUser) {
+                System.out.println("Compte indisponible.");
+            } else {
 
-            boolean validate = false;
+                System.out.println("Montant à débiter");
+                Double montantRetrait = myObj.nextDouble();
+
+                Comptes compteChoisi = arrayComptes.get(indexCompteChoisi);
+                Double soldePrecedent = compteChoisi.getSolde();
+
+                boolean validate = false;
 
 
-            String codeCompteChoisi = arrayComptes.get(indexCompteChoisi).getCode();
-            Integer indexOfCompteCourant = 0;
+                String codeCompteChoisi = arrayComptes.get(indexCompteChoisi).getCode();
+                Integer indexOfCompteCourant = 0;
 
-            if (arrayComptes.get(indexCompteChoisi).getType() == 1) {
-                // find index of chosen account from array compte courants
-                for (int i = 0; i < arrayComptesCourants.size(); i++) {
-                    if (arrayComptesCourants.get(i).getCode().equals(codeCompteChoisi)) {
-                        indexOfCompteCourant = i;
+                if (arrayComptes.get(indexCompteChoisi).getType() == 1) {
+                    // find index of chosen account from array compte courants
+                    for (int i = 0; i < arrayComptesCourants.size(); i++) {
+                        if (arrayComptesCourants.get(i).getCode().equals(codeCompteChoisi)) {
+                            indexOfCompteCourant = i;
+                        }
+                    }
+
+                    // check not more than overdraft if checking account
+                    Double decouvertCompteChoisi = arrayComptesCourants.get(indexOfCompteCourant).getDecouvert();
+                    if ((arrayComptes.get(indexCompteChoisi).getSolde() - montantRetrait) > decouvertCompteChoisi) {
+                        compteChoisi.setSolde(soldePrecedent - montantRetrait);
+                        Double nouveauSolde = compteChoisi.getSolde();
+                        String solde = nouveauSolde < 0 ? "\u001B[31m" + nouveauSolde + "€" + "\u001B[0m" : nouveauSolde + "€";
+                        System.out.println("Le compte a bien été débité de " + montantRetrait + "€. Nouveau solde : " + solde + " (ancien : " + soldePrecedent + "€).");
+                        validate = true;
+                    } else {
+                        System.out.println("Opération impossible.");
+                    }
+                } else {
+                    if ((arrayComptes.get(indexCompteChoisi).getSolde() - montantRetrait) >= 0) {
+                        compteChoisi.setSolde(soldePrecedent - montantRetrait);
+                        Double nouveauSolde = compteChoisi.getSolde();
+                        System.out.println("Le compte a bien été débité de " + montantRetrait + "€. Nouveau solde : " + nouveauSolde + "€ (ancien : " + soldePrecedent + "€).");
+                        validate = true;
+                    } else {
+                        System.out.println("Opération impossible.");
                     }
                 }
 
-                // check not more than overdraft if checking account
-                Double decouvertCompteChoisi = arrayComptesCourants.get(indexOfCompteCourant).getDecouvert();
-                if ((arrayComptes.get(indexCompteChoisi).getSolde() - montantRetrait) > decouvertCompteChoisi) {
-                    compteChoisi.setSolde(soldePrecedent - montantRetrait);
-                    Double nouveauSolde = compteChoisi.getSolde();
-                    String solde = nouveauSolde < 0 ? "\u001B[31m" + nouveauSolde + "€" + "\u001B[0m" : nouveauSolde + "€";
-                    System.out.println("Le compte a bien été débité de " + montantRetrait + "€. Nouveau solde : " + solde + " (ancien : " + soldePrecedent + "€).");
-                    validate = true;
-                } else {
-                    System.out.println("Opération impossible.");
-                }
-            } else {
-                if ((arrayComptes.get(indexCompteChoisi).getSolde() - montantRetrait) >= 0) {
-                    compteChoisi.setSolde(soldePrecedent - montantRetrait);
-                    Double nouveauSolde = compteChoisi.getSolde();
-                    System.out.println("Le compte a bien été débité de " + montantRetrait + "€. Nouveau solde : " + nouveauSolde + "€ (ancien : " + soldePrecedent + "€).");
-                    validate = true;
-                } else {
-                    System.out.println("Opération impossible.");
-                }
-            }
+                if (validate) {
+                    // saving operation
+                    saveOperation(compteChoisi, montantRetrait, "retrait");
 
-            if (validate) {
-                // saving operation
-                saveOperation(compteChoisi, montantRetrait, "retrait");
-
+                }
             }
         } else {
             System.out.println("Compte introuvable.");
@@ -174,7 +185,7 @@ public class Operations {
      * Method to credit a selected account of an amount given by user and debit another account - checking if withdrawal is possible (overdraft)
      * Including saving operations into an array
      */
-    public static void virement(ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants) {
+    public static void virement(ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants, Integer indexUser) {
 
         if (arrayComptes.size() < 2) {
             System.out.println("Il faut créer deux comptes pour pouvoir effectuer un virement.");
@@ -184,20 +195,20 @@ public class Operations {
             String numeroCompte = myObj.next();
             Integer indexCompteChoisi = Comptes.findIndex(arrayComptes, numeroCompte);
 
-            if (indexCompteChoisi == -1) {
+            if (indexCompteChoisi == -1 || arrayComptes.get(indexCompteChoisi).getIndexUser() != indexUser) {
                 System.out.println("Compte introuvable.");
-                virement(arrayComptes, arrayComptesCourants);
+                virement(arrayComptes, arrayComptesCourants, indexUser);
             } else {
                 System.out.println("N° du compte 2 (à créditer)");
                 String numeroCompte2 = myObj.next();
                 Integer indexCompteChoisi2 = Comptes.findIndex(arrayComptes, numeroCompte2);
 
-                if (indexCompteChoisi2 == -1) {
+                if (indexCompteChoisi2 == -1 || arrayComptes.get(indexCompteChoisi2).getIndexUser() != indexUser) {
                     System.out.println("Compte introuvable.");
-                    virement(arrayComptes, arrayComptesCourants);
+                    virement(arrayComptes, arrayComptesCourants, indexUser);
                 } else if (indexCompteChoisi.equals(indexCompteChoisi2)) {
-                    System.out.println("Vous ne pouvez pas effectuer de virement sur votre propre compte.");
-                    virement(arrayComptes, arrayComptesCourants);
+                    System.out.println("Vous ne pouvez pas effectuer de virement sur le même compte.");
+                    virement(arrayComptes, arrayComptesCourants, indexUser);
                 } else {
 
                     System.out.println("Montant de virement");
@@ -268,7 +279,7 @@ public class Operations {
      * Method to let user change the interest rate of a selected account - if account is a saving account
      * Including saving operations into an array
      */
-    public static void changeInterest(ArrayList<Comptes> arrayComptes, ArrayList<Epargnes> arrayComptesEpargnes) {
+    public static void changeInterest(ArrayList<Comptes> arrayComptes, ArrayList<Epargnes> arrayComptesEpargnes, Integer indexUser) {
 
         if (arrayComptesEpargnes.isEmpty()) {
             System.out.println("Aucun compte épargne disponible.");
@@ -279,30 +290,34 @@ public class Operations {
             Integer indexCompte = Comptes.findIndex(arrayComptes, numeroCompte);
 
             if (indexCompte != -1) {
-                Comptes compte = arrayComptes.get(indexCompte);
-
-                if (compte.getType() == 1) {
-                    System.out.println("Veuillez sélectionner un compte épargne.");
-                    changeInterest(arrayComptes, arrayComptesEpargnes);
+                if (arrayComptes.get(indexCompte).getIndexUser() != indexUser) {
+                    System.out.println("Compte indisponible.");
                 } else {
-                    String codeCompteChoisi = arrayComptes.get(indexCompte).getCode();
+                    Comptes compte = arrayComptes.get(indexCompte);
 
-                    Integer indexOfCompteEpargne = -1;
-                    for (int i = 0; i < arrayComptesEpargnes.size(); i++) {
-                        if (arrayComptesEpargnes.get(i).getCode().equals(codeCompteChoisi)) {
-                            indexOfCompteEpargne = i;
+                    if (compte.getType() == 1) {
+                        System.out.println("Veuillez sélectionner un compte épargne.");
+                        changeInterest(arrayComptes, arrayComptesEpargnes, indexUser);
+                    } else {
+                        String codeCompteChoisi = arrayComptes.get(indexCompte).getCode();
+
+                        Integer indexOfCompteEpargne = -1;
+                        for (int i = 0; i < arrayComptesEpargnes.size(); i++) {
+                            if (arrayComptesEpargnes.get(i).getCode().equals(codeCompteChoisi)) {
+                                indexOfCompteEpargne = i;
+                            }
                         }
+
+                        Epargnes compteChoisi = arrayComptesEpargnes.get(indexOfCompteEpargne);
+                        Double ancienTaux = compteChoisi.getTauxInteret();
+
+                        Scanner myObj2 = new Scanner(System.in);
+                        System.out.println("Ancien taux : " + ancienTaux + "%. Nouveau taux ?");
+                        Double nouveauTaux = myObj2.nextDouble();
+
+                        compteChoisi.setTauxInteret(nouveauTaux);
+                        System.out.println("Le taux est désormais de " + nouveauTaux + "%.");
                     }
-
-                    Epargnes compteChoisi = arrayComptesEpargnes.get(indexOfCompteEpargne);
-                    Double ancienTaux = compteChoisi.getTauxInteret();
-
-                    Scanner myObj2 = new Scanner(System.in);
-                    System.out.println("Ancien taux : " + ancienTaux + "%. Nouveau taux ?");
-                    Double nouveauTaux = myObj2.nextDouble();
-
-                    compteChoisi.setTauxInteret(nouveauTaux);
-                    System.out.println("Le taux est désormais de " + nouveauTaux + "%.");
                 }
             } else {
                 System.out.println("Compte introuvable.");
@@ -315,7 +330,7 @@ public class Operations {
      * Method to let user change the interest rate of a selected account - if account is a checking account
      * Including saving operations into an array
      */
-    public static void changeOverdraft(ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants) {
+    public static void changeOverdraft(ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants, Integer indexUser) {
 
         if (arrayComptesCourants.isEmpty()) {
             System.out.println("Aucun compte courant disponible.");
@@ -327,30 +342,37 @@ public class Operations {
             Integer indexCompte = Comptes.findIndex(arrayComptes, numeroCompte);
 
             if (indexCompte != -1) {
-                Comptes compte = arrayComptes.get(indexCompte);
 
-                if (compte.getType() == 2) {
-                    System.out.println("Veuillez sélectionner un compte courant.");
-                    changeOverdraft(arrayComptes, arrayComptesCourants);
-                } else {
-                    String codeCompteChoisi = arrayComptes.get(indexCompte).getCode();
+                    Comptes compte = arrayComptes.get(indexCompte);
 
-                    Integer indexOfCompteCourant = -1;
-                    for (int i = 0; i < arrayComptesCourants.size(); i++) {
-                        if (arrayComptesCourants.get(i).getCode().equals(codeCompteChoisi)) {
-                            indexOfCompteCourant = i;
+                    if (compte.getType() == 2) {
+                        System.out.println("Veuillez sélectionner un compte courant.");
+                        changeOverdraft(arrayComptes, arrayComptesCourants, indexUser);
+                    } else {
+                        String codeCompteChoisi = arrayComptes.get(indexCompte).getCode();
+
+                        if (arrayComptes.get(indexCompte).getIndexUser() != indexUser) {
+                            System.out.println("Compte indisponible.");
+                        } else {
+
+                        Integer indexOfCompteCourant = -1;
+                        for (int i = 0; i < arrayComptesCourants.size(); i++) {
+                            if (arrayComptesCourants.get(i).getCode().equals(codeCompteChoisi)) {
+                                indexOfCompteCourant = i;
+                            }
                         }
+
+                        Courants compteChoisi = arrayComptesCourants.get(indexOfCompteCourant);
+                        Double ancienDecouvert = compteChoisi.getDecouvert();
+
+                        Scanner myObj2 = new Scanner(System.in);
+                        System.out.println("Ancien découvert : " + ancienDecouvert + "€. Nouveau découvert ?");
+                        Double nouveauDecouvert = myObj2.nextDouble();
+
+                        compteChoisi.setDecouvert(nouveauDecouvert);
+                        System.out.println("Le découvert est désormais de " + nouveauDecouvert + "€.");
                     }
 
-                    Courants compteChoisi = arrayComptesCourants.get(indexOfCompteCourant);
-                    Double ancienDecouvert = compteChoisi.getDecouvert();
-
-                    Scanner myObj2 = new Scanner(System.in);
-                    System.out.println("Ancien découvert : " + ancienDecouvert + "€. Nouveau découvert ?");
-                    Double nouveauDecouvert = myObj2.nextDouble();
-
-                    compteChoisi.setDecouvert(nouveauDecouvert);
-                    System.out.println("Le découvert est désormais de " + nouveauDecouvert + "€.");
                 }
             } else {
                 System.out.println("Compte introuvable.");

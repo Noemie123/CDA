@@ -11,8 +11,8 @@ public class Courants extends Comptes {
     /**
      * Constructor
      */
-    public Courants (String code, Double solde, Double decouvert) {
-        super (code, solde);
+    public Courants (String code, Double solde, Integer type, Integer indexUser, Double decouvert) {
+        super (code, solde, type, indexUser);
         this.decouvert = decouvert;
     }
 
