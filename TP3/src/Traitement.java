@@ -233,9 +233,10 @@ public class Traitement {
     private static final ArrayList<Comptes> arrayComptes = new ArrayList<>();
     private static final ArrayList<Users> arrayUsers = new ArrayList<>();
 
+    private static final String[] argTable = new String[1];
+
     public static void main(String[] arg) {
         boolean isIdentified = true;
-        String[] argTable = new String[1];
 
 
         if (argTable[0] == null || !argTable[0].equals("in")) {
@@ -247,7 +248,7 @@ public class Traitement {
             argTable[0] = "in";
             Integer userChoiceMenu = displayMenu();
 
-            if (userChoiceMenu != 0 && arrayComptes.isEmpty() && userChoiceMenu != 1) {
+            if (userChoiceMenu != 0 && (arrayComptes.isEmpty() && userChoiceMenu != 1)) {
                 System.out.println("Veuillez créer un compte.");
                 Traitement.main(argTable);
             }
@@ -296,9 +297,8 @@ public class Traitement {
                     displayAmountRetrait();
                     break;
                 default:
-                    if (userChoiceMenu != 0) {
-                        System.out.println("Choix incorrect. Veuillez recommencer.");
-                    }
+                    System.out.println("Choix incorrect. Veuillez recommencer.");
+
             }
 
             if (userChoiceMenu != 0) {
