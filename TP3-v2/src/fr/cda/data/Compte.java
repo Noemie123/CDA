@@ -69,7 +69,7 @@ public class Compte {
     }
 
     public void setListeComptes(ArrayList<Compte> listeComptes) {
-        this.listeComptes = listeComptes;
+        Compte.listeComptes = listeComptes;
     }
 
     public ArrayList<Operations> getOperationsArrayList() {
@@ -100,41 +100,105 @@ public class Compte {
         System.out.println("1. Compte courant ?");
         System.out.println("2. Compte épargne ?");
 
-        Integer accountType = myObj.nextInt();
+        String accountTypeString = myObj.next();
+        Integer accountType = null;
 
-        if (accountType != 1 && accountType != 2) {
-            System.out.println("Choix incorrect.");
+
+        try {
+            accountType = Integer.parseInt(accountTypeString);
+        } catch (NumberFormatException ex) {
+            System.out.println("Veuillez renseigner un nombre.");
             createAccount(idUser);
-        } else {
-            System.out.println("Code du compte (0 pour arrêter)");
-            String codeCompte = myObj.next();
-
-            Integer indexCompte = findIndexCompte(codeCompte);
-
-            // if account code does not exist already
-            if (indexCompte == -1) {
-                System.out.println("Solde du compte");
-                Double soldeCompte = myObj.nextDouble();
-
-                if (accountType == 1) {
-                    Compte compteCourant = new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
-
-                } else {
-                    Compte compteEpargne = new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
-                }
-            } else {
-                System.out.println("Code du compte non valide.");
-                createAccount(idUser);
-            }
         }
 
+        if (accountType != null) {
+            if (accountType != 1 && accountType != 2) {
+                System.out.println("Choix incorrect.");
+                createAccount(idUser);
+            } else {
+                System.out.println("Code du compte (0 pour arrêter)");
+                String codeCompte = myObj.next();
+
+                Integer indexCompte = findIndexCompte(codeCompte);
+
+                // if account code does not exist already
+                if (indexCompte == -1) {
+                    System.out.println("Solde du compte");
+                    String soldeCompteString = myObj.next();
+                    Double soldeCompte = null;
+
+
+                    try {
+                        soldeCompte = Double.parseDouble(soldeCompteString);
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Veuillez renseigner un nombre.");
+                        createAccount(idUser);
+                    }
+
+                    if (soldeCompte != null) {
+                        if (accountType == 1) {
+                            Compte compteCourant = new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
+
+                        } else {
+                            Compte compteEpargne = new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
+                        }
+                    }
+                } else {
+                    System.out.println("Code du compte non valide.");
+                    createAccount(idUser);
+                }
+            }
+        }
     }
 
 
-    public static void amountVersement() {
+    public static void displayOperationAmount(Integer typeDisplay, Integer typeUser, String identifiantUser) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Entrez le n° du compte pour afficher le montant des versements.");
 
         String accountCode = myObj.next();
+        Integer indexCompteChoisi = Compte.findIndexCompte(accountCode);
+
+        if (indexCompteChoisi != -1 && (typeUser == 2 || (typeUser == 1 && (Compte.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser))))) {
+            Compte compteChoisi = Compte.listeComptes.get(indexCompteChoisi);
+            Double amountVersement = 0.0;
+            Double amountRetrait = 0.0;
+
+            if (typeDisplay == 1 || typeDisplay == 3) {
+                for (int i = 0; i < compteChoisi.getOperationsArrayList().size(); i++) {
+                    Operations currInstance = compteChoisi.getOperationsArrayList().get(i);
+                    if (currInstance.getType().equals("versement") || currInstance.getType().equals("virement / versement") ) {
+                        System.out.println(currInstance.getDate() + " - " + currInstance.getType() + " de " + currInstance.getMontant() + " €, effectué par " + currInstance.getIdentifiantUser());
+                        amountVersement += currInstance.getMontant();
+                    }
+                }
+            }
+
+            if (amountVersement != 0) {
+                System.out.println("Le montant des versements et de " + amountVersement + " €.\n");
+            } else if (typeDisplay != 2){
+                System.out.println("Aucun versement à afficher.\n");
+            }
+
+
+            if (typeDisplay == 2 || typeDisplay == 3) {
+                for (int i = 0; i < compteChoisi.getOperationsArrayList().size(); i++) {
+                    Operations currInstance = compteChoisi.getOperationsArrayList().get(i);
+                    if (currInstance.getType().equals("retrait") || currInstance.getType().equals("virement / retrait") ) {
+                        System.out.println(currInstance.getDate() + " - " + currInstance.getType() + " de " + currInstance.getMontant() + " €, effectué par " + currInstance.getIdentifiantUser());
+                        amountRetrait += currInstance.getMontant();
+                    }
+                }
+            }
+
+            if (amountRetrait != 0) {
+                System.out.println("Le montant des retraits et de " + amountRetrait + " €.\n");
+            } else if (typeDisplay !=1) {
+                System.out.println("Aucun retrait à afficher.\n");
+            }
+
+        } else {
+            System.out.println("Compte introuvable.");
+        }
     }
 }

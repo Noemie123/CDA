@@ -15,12 +15,21 @@ public class Traitement {
         System.out.println("1. Client ?");
         System.out.println("2. Conseiller ?");
 
-        Integer chosenNumber = myObj.nextInt();
+        String chosenNumberString = myObj.next();
+        Integer chosenNumber = null;
 
-        if (chosenNumber == 1 || chosenNumber == 2) {
-            return chosenNumber;
+
+        try {
+            chosenNumber = Integer.parseInt(chosenNumberString);
+        } catch (NumberFormatException ex) {
+            System.out.println("Veuillez renseigner un nombre.");
         }
 
+        if (chosenNumber != null) {
+            if (chosenNumber == 1 || chosenNumber == 2) {
+                return chosenNumber;
+            }
+        }
         return displayUserTypeMenu();
     }
 
@@ -29,12 +38,21 @@ public class Traitement {
         System.out.println("1. Créer un compte utilisateur");
         System.out.println("2. Se connecter");
 
-        Integer chosenNumber2 = myObj.nextInt();
+        String chosenNumberString2 = myObj.next();
+        Integer chosenNumber2 = null;
 
-        if (chosenNumber2 == 1 || chosenNumber2 == 2) {
-            return chosenNumber2;
+
+        try {
+            chosenNumber2 = Integer.parseInt(chosenNumberString2);
+        } catch (NumberFormatException ex) {
+            System.out.println("Veuillez renseigner un nombre.");
         }
 
+        if (chosenNumber2 != null) {
+            if (chosenNumber2 == 1 || chosenNumber2 == 2) {
+                return chosenNumber2;
+            }
+        }
         return displayCreateConnect();
     }
 
@@ -45,6 +63,7 @@ public class Traitement {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Identifiant ?");
         String idUser = myObj.next();
+
         Integer indexUser = User.findIndexUser(idUser);
 
         System.out.println("Mot de passe ?");
@@ -86,47 +105,55 @@ public class Traitement {
 
 
         System.out.println("Choisir une option (Pour arrêter = 0)");
+        String userChoiceString = myObj.next();
+        Integer userChoice = null;
 
-        Integer userChoice = myObj.nextInt();
 
-        switch (userChoice) {
-            case 0:
-                Traitement.main(null);
-                break;
-            case 1 :
-                Compte.createAccount(Traitement.currUser.getIdentifiant());
-                break;
-            case 2:
-                Operations.versement(currUser.getIdentifiant());
-                break;
-            case 3:
-                Operations.retrait(currUser.getIdentifiant());
-                break;
-            case 4:
-                Operations.virement(currUser.getIdentifiant(), 1);
-                break;
-            case 5:
-                displayListeCompte(1);
-                break;
-            case 6:
-                //TODO : liste des opérations
-                break;
-            case 7:
-                //TODO : montants versements
-                break;
-            case 8:
-                //TODO : montant retraits
-                break;
-            default:
-                System.out.println("Ce choix n'existe pas.");
+        try {
+            userChoice = Integer.parseInt(userChoiceString);
+        } catch (NumberFormatException ex) {
+            System.out.println("Veuillez renseigner un nombre.");
         }
 
+        if (userChoice != null) {
+
+            switch (userChoice) {
+                case 0:
+                    Traitement.main(null);
+                    break;
+                case 1:
+                    Compte.createAccount(Traitement.currUser.getIdentifiant());
+                    break;
+                case 2:
+                    Operations.versement(currUser.getIdentifiant());
+                    break;
+                case 3:
+                    Operations.retrait(currUser.getIdentifiant());
+                    break;
+                case 4:
+                    Operations.virement(currUser.getIdentifiant(), 1);
+                    break;
+                case 5:
+                    displayListeCompte(1);
+                    break;
+                case 6:
+                    Compte.displayOperationAmount(3, 1, currUser.getIdentifiant());
+                    break;
+                case 7:
+                    Compte.displayOperationAmount(1, 1, currUser.getIdentifiant());
+                    break;
+                case 8:
+                    Compte.displayOperationAmount(2, 1, currUser.getIdentifiant());
+                    break;
+                default:
+                    System.out.println("Ce choix n'existe pas.");
+            }
+        }
         displayCustomerMenu();
     }
 
 
     private static void displayAdvisorMenu() {
-//        Conseiller advisor = (Conseiller) currUser;
 
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("1. Activer/désactiver un compte");
@@ -134,37 +161,49 @@ public class Traitement {
         System.out.println("3. Voir la Liste des comptes");
         System.out.println("4. Changer les intérêts d'un compte");
         System.out.println("5. Changer la limite du découvert d'un compte");
+        System.out.println("6. Consulter la liste des opérations");
 
         System.out.println("Choisir une option (Pour arrêter = 0)");
+        String userChoiceString = myObj.next();
+        Integer userChoice = null;
 
-        Integer userChoice = myObj.nextInt();
 
-        switch (userChoice) {
-            case 0:
-                System.out.println("Vous êtes déconnecté.");
-                String[] arg = new String[0];
-                Traitement.main(arg);
-                break;
-            case 1 :
-                Conseiller.activeAccount();
-//                displayAdvisorMenu();
-                break;
-            case 2:
-                Operations.virement(currUser.getIdentifiant(), 2);
-                break;
-            case 3:
-                displayListeCompte(2);
-                break;
-            case 4:
-                Conseiller.changeInterest();
-                break;
-            case 5:
-                Conseiller.changeOverdraft();
-                break;
-            default:
-                System.out.println("Ce choix n'existe pas.");
+        try {
+            userChoice = Integer.parseInt(userChoiceString);
+        } catch (NumberFormatException ex) {
+            System.out.println("Veuillez renseigner un nombre.");
         }
 
+        if (userChoice != null) {
+
+            switch (userChoice) {
+                case 0:
+                    System.out.println("Vous êtes déconnecté.");
+                    String[] arg = new String[0];
+                    Traitement.main(arg);
+                    break;
+                case 1:
+                    Conseiller.activeAccount();
+                    break;
+                case 2:
+                    Operations.virement(currUser.getIdentifiant(), 2);
+                    break;
+                case 3:
+                    displayListeCompte(2);
+                    break;
+                case 4:
+                    Conseiller.changeInterest();
+                    break;
+                case 5:
+                    Conseiller.changeOverdraft();
+                    break;
+                case 6:
+                    Compte.displayOperationAmount(3, 2, currUser.getIdentifiant());
+                    break;
+                default:
+                    System.out.println("Ce choix n'existe pas.");
+            }
+        }
         displayAdvisorMenu();
     }
 
@@ -187,6 +226,9 @@ public class Traitement {
             System.out.println("Aucun compte à afficher.");
         } else {
             for (Compte compteUnit : listeDesComptes) {
+                if (compteUnit instanceof Epargne) {
+                    compteUnit.setSolde(compteUnit.getSolde() + (((Epargne) compteUnit).getTauxInteret()*compteUnit.getSolde()));
+                }
                 User accountOwner = User.listeUsers.get(User.findIndexUser(compteUnit.getIdentifiantUser()));
                 System.out.println("Compte n° " + compteUnit.getCode() + ", solde : " + compteUnit.getSolde() + "€, " + (compteUnit instanceof Courant ? "Découvert autorisé : " + ((Courant) compteUnit).getDecouvert() + "€" : "Taux d'intérêts : " + ((Epargne) compteUnit).getTauxInteret() + "%") + (userType == 2 ? ", appartenant à " + accountOwner.getSurname() + " " + accountOwner.getFirstname() + ", Activé = " + (compteUnit.isActivated() ? "oui" : "non") : ""));
             }
@@ -215,7 +257,6 @@ public class Traitement {
             // if connection is okay
             if (connected) {
                 System.out.println("Connecté");
-//                String identifiantUser = Traitement.currUser.getIdentifiant();
 
                 // if user is a customer
                 if (userType == 1) {

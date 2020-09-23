@@ -1,6 +1,5 @@
 package fr.cda.data;
 
-import java.util.ArrayList;
 
 public class Courant extends Compte {
     /**

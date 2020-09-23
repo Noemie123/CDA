@@ -89,10 +89,8 @@ public class User {
         System.out.println("Nom ? (0 pour arrêter)");
         String userName = myObj.next();
 
-        if (userName.equals("0")) {
-            //TODO : find how to call main
+        if (!userName.equals("0")) {
 
-        } else {
             System.out.println("Prénom ?");
             String userFirstname = myObj.next();
 
