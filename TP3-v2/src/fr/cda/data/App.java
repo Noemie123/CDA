@@ -2,47 +2,39 @@ package fr.cda.data;
 
 public class App {
 
-    public static void appli() {
-        // select type of user menu
-        Integer userType = Display.displayUserTypeMenu();
+    public static void run() {
+        Integer userType = Display.displayUserTypeMenu(); // select type of user menu
 
-        // select create user account or connect
-        Integer createConnectChoice = Display.displayCreateConnect();
+        Integer createConnectChoice = Display.displayCreateConnect(); // select create user account or connect
 
-        // if create user account
-        if (createConnectChoice == 1) {
+
+        if (createConnectChoice == 1) { // if create user account
             User.createUser(userType);
-            appli();
+            run();
 
-            // if user wants to connect
-        } else if (createConnectChoice == 2) {
+        } else if (createConnectChoice == 2) {  // if user wants to connect
             boolean connected = User.connect(userType);
 
 
-            // if connection is okay
-            if (connected) {
+            if (connected) { // if connection is okay
                 System.out.println("Connecté");
 
-                // if user is a customer
-                if (userType == 1) {
+
+                if (userType == 1) {  // if user is a customer
                     Display.displayCustomerMenu();
-
-
-                    // if user is an advisor
-                } else if (userType == 2) {
+                } else if (userType == 2) { // if user is an advisor
                     Display.displayAdvisorMenu();
-
                 }
 
-                // if connection not okay
-            } else {
+
+            } else {  // if connection not okay
                 System.out.println("Pas connecté");
-                appli();
+                run();
             }
 
-            // if uncorrect choice between create user & connect
-        } else {
-            appli();
+
+        } else { // if uncorrect choice between create user & connect, return to base
+            run();
         }
 
     }

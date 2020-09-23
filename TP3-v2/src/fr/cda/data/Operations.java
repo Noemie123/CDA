@@ -5,9 +5,13 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Operations {
-    /**
-     * Attributes
-     */
+
+    /**************************
+     *                        *
+     *       ATTRIBUTES       *
+     *                        *
+     **************************/
+
     private Integer numero;
     private String date;
     private Double montant;
@@ -15,9 +19,14 @@ public class Operations {
     private String identifiantUser;
 
 
-    /**
-     * Constructor
-     */
+
+
+    /**************************
+     *                        *
+     *      CONSTRUCTOR       *
+     *                        *
+     **************************/
+
     public Operations (Integer numero, String date, Double montant, String type, String identifiantUser) {
         this.numero = numero;
         this.date = date;
@@ -27,59 +36,41 @@ public class Operations {
     }
 
 
-    /**
-     * Lists of getters and setters
-     */
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
-
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public Double getMontant() {
         return montant;
     }
 
-    public void setMontant(Double montant) {
-        this.montant = montant;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getIdentifiantUser() {
         return identifiantUser;
     }
 
-    public void setIdentifiantUser(String identifiantUser) {
-        this.identifiantUser = identifiantUser;
-    }
 
+
+
+
+
+    /**************************
+     *                        *
+     *        METHODS         *
+     *                        *
+     **************************/
 
     /**
-     * Methods
+     * Method to save operations in ArrayList of the selected account, specifying the id of the user who did the op
      */
-
     public static void saveOperations(Compte compteChoisi, Double montant, String type, String identifiantUser) {
         Date date = new Date();
-        String today = new SimpleDateFormat("dd-MM-yyyy").format(date);
+        String today = new SimpleDateFormat("dd-MM-yyyy").format(date); // date format to European date stored as a String
 
-        Integer operationNumber = compteChoisi.getOperationsArrayList().size()+1;
+        Integer operationNumber = compteChoisi.getOperationsArrayList().size()+1; // setting operation number one after the other
 
         Operations op = new Operations(operationNumber, today, montant, type, identifiantUser);
         compteChoisi.getOperationsArrayList().add(op);
@@ -87,8 +78,7 @@ public class Operations {
 
 
     /**
-     * Method to credit a selected account of an amount given by user
-     * Including saving operations into an array
+     * Method to credit a selected account of an amount given by user, including saving operations into an array
      */
     public static void versement(String identifiantUser) {
         Scanner myObj = new Scanner(System.in);
@@ -100,27 +90,27 @@ public class Operations {
             Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompteChoisi);
 
 
-            if (indexCompteChoisi != -1) {
+            if (indexCompteChoisi != -1) { // if account exists
+                // if account is the user's account and if account was activated beforehand
                 if (!Compte.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser) || !Compte.listeComptes.get(indexCompteChoisi).isActivated()) {
                     System.out.println("Compte indisponible.");
                 } else {
 
                     System.out.println("Montant de versement");
-                    String montantVersementString = myObj.next();
+                    String montantVersementString = myObj.next(); // receiving user answer in String
                     Double montantVersement = null;
 
 
-                    try {
+                    try { // try to parse user answer to check if Double
                         montantVersement = Double.parseDouble(montantVersementString);
                     } catch (NumberFormatException ex) {
                         System.out.println("Veuillez renseigner un nombre.");
-                        versement(identifiantUser);
+                        versement(identifiantUser); // recursive
                     }
 
-                    if (montantVersement != null) {
+                    if (montantVersement != null) { // if user answer is a Double
                         Compte compteChoisi = Compte.listeComptes.get(indexCompteChoisi);
                         Double soldePrecedent = compteChoisi.getSolde();
-                        String soldePrec = soldePrecedent < 0 ? "\u001B[31m" + soldePrecedent + "€" + "\u001B[0m" : soldePrecedent + "€";
                         compteChoisi.setSolde(soldePrecedent + montantVersement);
                         Double nouveauSolde = compteChoisi.getSolde();
 
@@ -128,7 +118,7 @@ public class Operations {
                         saveOperations(compteChoisi, montantVersement, "versement", identifiantUser);
 
 
-                        System.out.println("Le compte a bien été crédité de " + montantVersement + "€. Nouveau solde : " + nouveauSolde + "€ (ancien : " + soldePrec + ").");
+                        System.out.println("Le compte a bien été crédité de " + montantVersement + "€. Nouveau solde : " + nouveauSolde + "€ (ancien : " + soldePrecedent + ").");
                     }
                 }
             } else {
@@ -139,8 +129,7 @@ public class Operations {
 
 
     /**
-     * Method to debit a selected account of an amount given by user - checking if withdrawal is possible (overdraft)
-     * Including saving operations into an array
+     * Method to debit a selected account of an amount given by user - checking if withdrawal is possible (overdraft) and including saving operations into an array
      */
     public static void retrait(String identifiantUser) {
         Scanner myObj = new Scanner(System.in);
@@ -150,29 +139,30 @@ public class Operations {
         if (!numeroCompte.equals("0")) {
             Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompte);
 
-            if (indexCompteChoisi != -1) {
-
+            if (indexCompteChoisi != -1) {// if account exists
+                // if account is the user's account and if account was activated beforehand
                 if (!Compte.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser) || !Compte.listeComptes.get(indexCompteChoisi).isActivated()) {
                     System.out.println("Compte indisponible.");
                 } else {
 
                     System.out.println("Montant à débiter");
-                    String montantRetraitString = myObj.next();
+                    String montantRetraitString = myObj.next(); // receiving user answer in String
                     Double montantRetrait = null;
 
 
-                    try {
+                    try { // try to parse user answer to check if Double
                         montantRetrait = Double.parseDouble(montantRetraitString);
                     } catch (NumberFormatException ex) {
                         System.out.println("Veuillez renseigner un nombre.");
-                        retrait(identifiantUser);
+                        retrait(identifiantUser); // recursive
                     }
 
-                    if (montantRetrait != null) {
+                    if (montantRetrait != null) { // if user answer is a Double
                     Compte compteChoisi = Compte.listeComptes.get(indexCompteChoisi);
                     Double soldePrecedent = compteChoisi.getSolde();
 
 
+                    // checking that debit does cause to go overdraft if current account or below 0 if savings account
                     if ((compteChoisi instanceof Courant && (soldePrecedent - montantRetrait > ((Courant) compteChoisi).getDecouvert())) || (compteChoisi instanceof Epargne && (soldePrecedent - montantRetrait >= 0))) {
                         compteChoisi.setSolde(soldePrecedent - montantRetrait);
                         Double nouveauSolde = compteChoisi.getSolde();
@@ -196,8 +186,7 @@ public class Operations {
 
 
     /**
-     * Method to credit a selected account of an amount given by user and debit another account - checking if withdrawal is possible (overdraft)
-     * Including saving operations into an array
+     * Method to credit a selected account of an amount given by user and debit another account - checking if withdrawal is possible (overdraft) and including saving operations into an array
      */
     public static void virement(String identifiantUser, Integer typeUser) {
 
@@ -208,7 +197,7 @@ public class Operations {
 
         if (!numeroCompte.equals("0")) {
             Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompte);
-
+            // if account exists and account is the user's account (if user is customer) and if account was activated beforehand
             if (indexCompteChoisi == -1 || (typeUser == 1 && !Compte.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser)) || !Compte.listeComptes.get(indexCompteChoisi).isActivated()) {
                 System.out.println("Compte introuvable.");
             } else {
@@ -216,31 +205,32 @@ public class Operations {
                 String numeroCompte2 = myObj.next();
                 Integer indexCompteChoisi2 = Compte.findIndexCompte(numeroCompte2);
 
+                // if account does not exist OR the account is not the current customer's AND if account not activated
                 if (indexCompteChoisi2 == -1 || (typeUser == 1 && !Compte.listeComptes.get(indexCompteChoisi2).getIdentifiantUser().equals(identifiantUser)) && !Compte.listeComptes.get(indexCompteChoisi2).isActivated()) {
                     System.out.println("Compte introuvable.");
-                    virement(identifiantUser, typeUser);
-                } else if (indexCompteChoisi.equals(indexCompteChoisi2)) {
+                    virement(identifiantUser, typeUser); // recursive
+                } else if (indexCompteChoisi.equals(indexCompteChoisi2)) { // if bank transfer on the same account
                     System.out.println("Vous ne pouvez pas effectuer de virement sur le même compte.");
-                    virement(identifiantUser, typeUser);
+                    virement(identifiantUser, typeUser); // recursive
                 } else {
 
                     System.out.println("Montant de virement");
-                    String montantVirementString = myObj.next();
+                    String montantVirementString = myObj.next(); // receiving user answer in String
                     Double montantVirement = null;
 
 
-                    try {
+                    try { // try to parse user answer to check if Double
                         montantVirement = Double.parseDouble(montantVirementString);
                     } catch (NumberFormatException ex) {
                         System.out.println("Veuillez renseigner un nombre.");
-                        virement(identifiantUser, typeUser);
+                        virement(identifiantUser, typeUser); // recursive
                     }
 
-                    if (montantVirement != null) {
+                    if (montantVirement != null) { // if user answer is a Double
                         Compte compteChoisi = Compte.listeComptes.get(indexCompteChoisi);
 
 
-                        //checking overdraft on first account
+                        // checking that debit does cause to go overdraft if current account or below 0 if savings account on first account
                         if (compteChoisi instanceof Courant && (compteChoisi.getSolde() - montantVirement > ((Courant) compteChoisi).getDecouvert()) || (compteChoisi instanceof Epargne && (compteChoisi.getSolde() - montantVirement >= 0))) {
                             Compte compteChoisi2 = Compte.listeComptes.get(indexCompteChoisi2);
 
