@@ -13,6 +13,7 @@ public class Compte {
     protected String identifiantUser;
 
     public static ArrayList<Compte> listeComptes = new ArrayList<Compte>();
+    protected ArrayList<Operations> operationsArrayList = new ArrayList<>();
 
 
     /**
@@ -71,6 +72,14 @@ public class Compte {
         this.listeComptes = listeComptes;
     }
 
+    public ArrayList<Operations> getOperationsArrayList() {
+        return operationsArrayList;
+    }
+
+    public void setOperationsArrayList(ArrayList<Operations> operationsArrayList) {
+        this.operationsArrayList = operationsArrayList;
+    }
+
 
     /**
      * Methods
@@ -121,4 +130,11 @@ public class Compte {
 
     }
 
+
+    public static void amountVersement() {
+        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+        System.out.println("Entrez le n° du compte pour afficher le montant des versements.");
+
+        String accountCode = myObj.next();
+    }
 }

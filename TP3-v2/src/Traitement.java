@@ -97,13 +97,13 @@ public class Traitement {
                 Compte.createAccount(Traitement.currUser.getIdentifiant());
                 break;
             case 2:
-                //TODO : versement
+                Operations.versement(currUser.getIdentifiant());
                 break;
             case 3:
-                //TODO : retrait
+                Operations.retrait(currUser.getIdentifiant());
                 break;
             case 4:
-                //TODO : virement
+                Operations.virement(currUser.getIdentifiant(), 1);
                 break;
             case 5:
                 displayListeCompte(1);
@@ -150,7 +150,7 @@ public class Traitement {
 //                displayAdvisorMenu();
                 break;
             case 2:
-                //TODO : virement
+                Operations.virement(currUser.getIdentifiant(), 2);
                 break;
             case 3:
                 displayListeCompte(2);
@@ -192,6 +192,7 @@ public class Traitement {
             }
         }
     }
+
 
 
     public static void main(String[] arg) {
