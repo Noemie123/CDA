@@ -125,4 +125,40 @@ public class User {
         }
 
     }
+
+
+    public static User currUser;
+
+
+    public static boolean connect(Integer userType) {
+        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+        System.out.println("Identifiant ?");
+        String idUser = myObj.next();
+
+        Integer indexUser = User.findIndexUser(idUser);
+
+        System.out.println("Mot de passe ?");
+        String mdp = myObj.next();
+
+        // if exists
+        if (indexUser != -1) {
+            User.currUser = User.listeUsers.get(indexUser);
+
+            // if correct type
+            if ((currUser instanceof Client && userType == 1) || (currUser instanceof Conseiller && userType == 2)) {
+
+                // if mdp is okay
+                if (currUser.getMdp().equals(mdp)) {
+                    return true;
+                }
+
+            } else {
+                System.out.println("Choisissez le bon type.");
+                return false;
+            }
+        }
+        System.out.println("Identifiant incorrect.");
+        return false;
+
+    }
 }

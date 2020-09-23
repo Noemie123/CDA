@@ -5,44 +5,6 @@ import java.util.Scanner;
 
 public class Display {
 
-    public static User currUser;
-
-
-    public static boolean connect(Integer userType) {
-        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        System.out.println("Identifiant ?");
-        String idUser = myObj.next();
-
-        Integer indexUser = User.findIndexUser(idUser);
-
-        System.out.println("Mot de passe ?");
-        String mdp = myObj.next();
-
-        // if exists
-        if (indexUser != -1) {
-            Display.currUser = User.listeUsers.get(indexUser);
-
-            // if correct type
-            if ((currUser instanceof Client && userType == 1) || (currUser instanceof Conseiller && userType == 2)) {
-
-                // if mdp is okay
-                if (currUser.getMdp().equals(mdp)) {
-                    return true;
-                }
-
-            } else {
-                System.out.println("Choisissez le bon type.");
-                return false;
-            }
-        }
-        System.out.println("Identifiant incorrect.");
-        return false;
-
-    }
-
-
-
-
     public static Integer displayUserTypeMenu() {
 
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
@@ -99,7 +61,7 @@ public class Display {
 
         if (userType == 1) {
             for (Compte compt : Compte.listeComptes) {
-                if (compt.getIdentifiantUser().equals(Display.currUser.getIdentifiant()) && compt.isActivated()) {
+                if (compt.getIdentifiantUser().equals(User.currUser.getIdentifiant()) && compt.isActivated()) {
                     listeDesComptes.add(compt);
                 }
             }
@@ -155,28 +117,28 @@ public class Display {
                     App.appli();
                     break;
                 case 1:
-                    Compte.createAccount(Display.currUser.getIdentifiant());
+                    Compte.createAccount(User.currUser.getIdentifiant());
                     break;
                 case 2:
-                    Operations.versement(currUser.getIdentifiant());
+                    Operations.versement(User.currUser.getIdentifiant());
                     break;
                 case 3:
-                    Operations.retrait(currUser.getIdentifiant());
+                    Operations.retrait(User.currUser.getIdentifiant());
                     break;
                 case 4:
-                    Operations.virement(currUser.getIdentifiant(), 1);
+                    Operations.virement(User.currUser.getIdentifiant(), 1);
                     break;
                 case 5:
                     Display.displayListeCompte(1);
                     break;
                 case 6:
-                    Compte.displayOperationAmount(3, 1, currUser.getIdentifiant());
+                    Compte.displayOperationAmount(3, 1, User.currUser.getIdentifiant());
                     break;
                 case 7:
-                    Compte.displayOperationAmount(1, 1, currUser.getIdentifiant());
+                    Compte.displayOperationAmount(1, 1, User.currUser.getIdentifiant());
                     break;
                 case 8:
-                    Compte.displayOperationAmount(2, 1, currUser.getIdentifiant());
+                    Compte.displayOperationAmount(2, 1, User.currUser.getIdentifiant());
                     break;
                 default:
                     System.out.println("Ce choix n'existe pas.");
@@ -217,7 +179,7 @@ public class Display {
                     Conseiller.activeAccount();
                     break;
                 case 2:
-                    Operations.virement(currUser.getIdentifiant(), 2);
+                    Operations.virement(User.currUser.getIdentifiant(), 2);
                     break;
                 case 3:
                     Display.displayListeCompte(2);
@@ -229,7 +191,7 @@ public class Display {
                     Conseiller.changeOverdraft();
                     break;
                 case 6:
-                    Compte.displayOperationAmount(3, 2, currUser.getIdentifiant());
+                    Compte.displayOperationAmount(3, 2, User.currUser.getIdentifiant());
                     break;
                 default:
                     System.out.println("Ce choix n'existe pas.");

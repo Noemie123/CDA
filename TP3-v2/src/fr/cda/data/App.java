@@ -16,7 +16,7 @@ public class App {
 
             // if user wants to connect
         } else if (createConnectChoice == 2) {
-            boolean connected = Display.connect(userType);
+            boolean connected = User.connect(userType);
 
 
             // if connection is okay
