@@ -116,37 +116,37 @@ public class Compte {
                 System.out.println("Choix incorrect.");
                 createAccount(idUser);
             } else {
-                System.out.println("Code du compte (0 pour arrêter)");
+                System.out.println("Code du compte - 2 caractères minimum (0 pour arrêter)");
                 String codeCompte = myObj.next();
 
-                Integer indexCompte = findIndexCompte(codeCompte);
+                    Integer indexCompte = findIndexCompte(codeCompte);
 
-                // if account code does not exist already
-                if (indexCompte == -1) {
-                    System.out.println("Solde du compte");
-                    String soldeCompteString = myObj.next();
-                    Double soldeCompte = null;
+                    // if account code does not exist already
+                    if (indexCompte == -1 || codeCompte.length() < 1) {
+                        System.out.println("Solde du compte");
+                        String soldeCompteString = myObj.next();
+                        Double soldeCompte = null;
 
 
-                    try {
-                        soldeCompte = Double.parseDouble(soldeCompteString);
-                    } catch (NumberFormatException ex) {
-                        System.out.println("Veuillez renseigner un nombre.");
+                        try {
+                            soldeCompte = Double.parseDouble(soldeCompteString);
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Veuillez renseigner un nombre.");
+                            createAccount(idUser);
+                        }
+
+                        if (soldeCompte != null) {
+                            if (accountType == 1) {
+                                Compte compteCourant = new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
+
+                            } else {
+                                Compte compteEpargne = new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
+                            }
+                        }
+                    } else {
+                        System.out.println("Code du compte non valide (déjà pris ou nb de caractères invalides).");
                         createAccount(idUser);
                     }
-
-                    if (soldeCompte != null) {
-                        if (accountType == 1) {
-                            Compte compteCourant = new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
-
-                        } else {
-                            Compte compteEpargne = new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
-                        }
-                    }
-                } else {
-                    System.out.println("Code du compte non valide.");
-                    createAccount(idUser);
-                }
             }
         }
     }
