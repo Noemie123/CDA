@@ -103,61 +103,67 @@ public class Compte {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("1. Compte courant ?");
         System.out.println("2. Compte épargne ?");
+        System.out.println("0 pour arrêter.");
 
         String accountTypeString = myObj.next(); // receiving user answer in String
         Integer accountType = null;
 
 
-        try { // try to parse user answer to check if Integer
-            accountType = Integer.parseInt(accountTypeString);
-        } catch (NumberFormatException ex) {
-            System.out.println("Veuillez renseigner un nombre.");
-            createAccount(idUser); // recursive
-        }
+        if (!accountTypeString.equals("0")) {
 
-        if (accountType != null) { // if user answer is an Integer
-            if (accountType != 1 && accountType != 2) {
-                System.out.println("Choix incorrect.");
+            try { // try to parse user answer to check if Integer
+                accountType = Integer.parseInt(accountTypeString);
+            } catch (NumberFormatException ex) {
+                System.out.println("Veuillez renseigner un nombre.");
                 createAccount(idUser); // recursive
-            } else {
-                System.out.println("Code du compte - 3 caractères minimum (0 pour arrêter)");
-                String codeCompte = myObj.next();
+            }
 
-                if (codeCompte.length() > 2) {
-                    Integer indexCompte = findIndexCompte(codeCompte);
+            if (accountType != null) { // if user answer is an Integer
+                if (accountType != 1 && accountType != 2) {
+                    System.out.println("Choix incorrect.");
+                    createAccount(idUser); // recursive
+                } else {
+                    System.out.println("Code du compte - 3 caractères minimum (0 pour arrêter)");
+                    String codeCompte = myObj.next();
 
-                    // if account code does not exist already
-                    if (indexCompte == -1) {
-                        System.out.println("Solde du compte");
-                        String soldeCompteString = myObj.next(); // receiving user answer in String
-                        Double soldeCompte = null;
+                    if (codeCompte.length() > 2) {
+                        Integer indexCompte = findIndexCompte(codeCompte);
+
+                        // if account code does not exist already
+                        if (indexCompte == -1) {
+                            System.out.println("Solde du compte");
+                            String soldeCompteString = myObj.next(); // receiving user answer in String
+                            Double soldeCompte = null;
 
 
-                        try { // try to parse user answer to check if Double
-                            soldeCompte = Double.parseDouble(soldeCompteString);
-                        } catch (NumberFormatException ex) {
-                            System.out.println("Veuillez renseigner un nombre.");
-                            createAccount(idUser);
-                        }
-
-                        if (soldeCompte != null) { // if user answer is a Double
-
-                            if (accountType == 1) { // if account is current account
-                                new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
-                            } else { // if account is savings account
-                                new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
+                            try { // try to parse user answer to check if Double
+                                soldeCompte = Double.parseDouble(soldeCompteString);
+                            } catch (NumberFormatException ex) {
+                                System.out.println("Veuillez renseigner un nombre.");
+                                createAccount(idUser);
                             }
 
+                            if (soldeCompte != null) { // if user answer is a Double
+
+                                if (accountType == 1) { // if account is current account
+                                    new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
+                                } else { // if account is savings account
+                                    new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
+                                }
+
+                            }
+                        } else {
+                            System.out.println("Code du compte déjà pris.");
+                            createAccount(idUser); // recursive
                         }
                     } else {
-                        System.out.println("Code du compte déjà pris.");
+                        System.out.println("Le code du compte doit comporter 3 caractères minimum.");
                         createAccount(idUser); // recursive
                     }
-                } else {
-                    System.out.println("Le code du compte doit comporter 3 caractères minimum.");
-                    createAccount(idUser); // recursive
                 }
             }
+        } else {
+            App.run();
         }
     }
 
