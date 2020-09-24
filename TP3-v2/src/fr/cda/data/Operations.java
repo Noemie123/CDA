@@ -36,6 +36,15 @@ public class Operations {
     }
 
 
+
+
+    /**************************
+     *                        *
+     *    GETTER & SETTER     *
+     *                        *
+     **************************/
+
+
     public String getDate() {
         return date;
     }
@@ -51,8 +60,6 @@ public class Operations {
     public String getIdentifiantUser() {
         return identifiantUser;
     }
-
-
 
 
 

@@ -4,19 +4,29 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class User {
-    /**
-     * Attributes
-     */
+
+    /**************************
+     *                        *
+     *       ATTRIBUTES       *
+     *                        *
+     **************************/
+
     protected String surname;
     protected String firstname;
     protected String identifiant;
     protected String mdp;
 
-    public static ArrayList<User> listeUsers = new ArrayList<User>();
+    public static ArrayList<User> listeUsers = new ArrayList<>();
 
-    /**
-     * Constructor
-     */
+    public static User currUser;
+
+
+    /**************************
+     *                        *
+     *      CONSTRUCTOR       *
+     *                        *
+     **************************/
+
     public User (String surname, String firstname, String identifiant, String mdp) {
         this.surname = surname;
         this.firstname = firstname;
@@ -27,52 +37,44 @@ public class User {
     }
 
 
-    /**
-     * Getters & Setters
-     */
+
+    /**************************
+     *                        *
+     *    GETTER & SETTER     *
+     *                        *
+     **************************/
+
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
 
     public String getFirstname() {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
 
     public String getIdentifiant() {
         return identifiant;
     }
 
-    public void setIdentifiant(String identifiant) {
-        this.identifiant = identifiant;
-    }
 
     public String getMdp() {
         return mdp;
     }
 
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
 
-    public ArrayList<User> getListeUsers() {
-        return listeUsers;
-    }
 
-    public void setListeUsers(ArrayList<User> listeUsers) {
-        User.listeUsers = listeUsers;
-    }
 
+
+    /**************************
+     *                        *
+     *        METHODS         *
+     *                        *
+     **************************/
 
     /**
-     * Methods
+     * Method to find index of a user in the ArrayList of all users thanks to its id
      */
     public static Integer findIndexUser(String idUser) {
         for (int i = 0; i < User.listeUsers.size(); i++) {
@@ -84,6 +86,9 @@ public class User {
         return -1;
     }
 
+    /**
+     * Method to create user and set his type according to choice made in first menu
+     */
     public static void createUser(Integer userType) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Nom ? (0 pour arrêter)");
@@ -97,7 +102,7 @@ public class User {
             System.out.println("Pseudo / Identifiant ?");
             String userIdentifiant = myObj.next();
 
-            Integer indexUser = findIndexUser(userIdentifiant);
+            Integer indexUser = findIndexUser(userIdentifiant); // checking if id not used yet
 
             // if id not already taken
             if (indexUser == -1) {
@@ -108,11 +113,11 @@ public class User {
                 String userMdp2 = myObj.next();
 
                 // if both passwords are the same
-                if (userMdp.equals(userMdp2)) {
+                if (userMdp.equals(userMdp2)) { // checking if passwords are the same and then condition to create right type of user
                     if (userType == 1) {
-                        User client = new Client(userName, userFirstname, userIdentifiant, userMdp);
+                        new Client(userName, userFirstname, userIdentifiant, userMdp);
                     } else if (userType == 2) {
-                        User conseiller = new Conseiller(userName, userFirstname, userIdentifiant, userMdp);
+                        new Conseiller(userName, userFirstname, userIdentifiant, userMdp);
                     }
                 } else {
                     System.out.println("Mots de passe non identiques.");
@@ -127,9 +132,11 @@ public class User {
     }
 
 
-    public static User currUser;
 
 
+    /**
+     * Method to connect - true if connection is ok, false if not
+     */
     public static boolean connect(Integer userType) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Identifiant ?");

@@ -5,16 +5,26 @@ import java.util.Scanner;
 
 public class Conseiller extends User {
 
-    /**
-     * Constructor
-     */
+    /**************************
+     *                        *
+     *      CONSTRUCTOR       *
+     *                        *
+     **************************/
+
     public Conseiller (String surname, String firstname, String identifiant, String mdp ) {
         super(surname, firstname, identifiant, mdp);
     }
 
 
+
+    /**************************
+     *                        *
+     *        METHODS         *
+     *                        *
+     **************************/
+
     /**
-     * Methods
+     * Method to activate or disactive an account
      */
     public static void activeAccount() {
         boolean found = false;
@@ -49,30 +59,33 @@ public class Conseiller extends User {
     }
 
 
+    /**
+     * Method to change interest rate of an account - checking the account is a savings one
+     */
     public static void changeInterest() {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Nom du compte à modifier ? (0 pour arrêter)");
         String accountCode = myObj.next();
 
         if (!accountCode.equals("0")) {
-            Integer indexCompte = Compte.findIndexCompte(accountCode);
+            Integer indexCompte = Compte.findIndexCompte(accountCode); // checking the account exists
             if (indexCompte != -1 && Compte.listeComptes.get(indexCompte).isActivated()) {
                 Compte compte = Compte.listeComptes.get(indexCompte);
 
-                if (compte instanceof Epargne) {
+                if (compte instanceof Epargne) { // checking the account is a savings one
                     System.out.println("Entrez le nouveau taux d'intérêts");
-                    String newInterestString = myObj.next();
+                    String newInterestString = myObj.next(); // receiving user answer in String
                     Double newInterest = null;
 
 
-                    try {
+                    try { // try to parse user answer to check if Double
                         newInterest = Double.parseDouble(newInterestString);
                     } catch (NumberFormatException ex) {
                         System.out.println("Veuillez renseigner un nombre.");
                         changeInterest();
                     }
 
-                    if (newInterest != null) {
+                    if (newInterest != null) { // if user answer is a Double
                         ((Epargne) compte).setTauxInteret(newInterest);
                         System.out.println("Taux d'intérêt changé.");
                     }
@@ -87,30 +100,34 @@ public class Conseiller extends User {
         }
     }
 
+
+    /**
+     * Method to change overdraft rate of an account - checking the account is a current one
+     */
     public static void changeOverdraft() {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Nom du compte à modifier ? (0 pour arrêter)");
         String accountCode = myObj.next();
 
         if (!accountCode.equals("0")) {
-            Integer indexCompte = Compte.findIndexCompte(accountCode);
+            Integer indexCompte = Compte.findIndexCompte(accountCode); // checking the account exists
             if (indexCompte != -1 && Compte.listeComptes.get(indexCompte).isActivated()) {
                 Compte compte = Compte.listeComptes.get(indexCompte);
 
-                if (compte instanceof Courant) {
+                if (compte instanceof Courant) { // checking account is a current one
                     System.out.println("Entrez le nouveau montant du découvert autorisé");
-                    String newOverdraftString = myObj.next();
+                    String newOverdraftString = myObj.next(); // receiving user answer in String
                     Double newOverdraft = null;
 
 
-                    try {
+                    try { // try to parse user answer to check if Double
                         newOverdraft = Double.parseDouble(newOverdraftString);
                     } catch (NumberFormatException ex) {
                         System.out.println("Veuillez renseigner un nombre.");
                         changeOverdraft();
                     }
 
-                    if (newOverdraft != null) {
+                    if (newOverdraft != null) { // if user answer is a Double
                         ((Courant) compte).setDecouvert(newOverdraft);
                         System.out.println("Montant du découvert changé.");
                     }
