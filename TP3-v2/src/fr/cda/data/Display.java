@@ -40,24 +40,29 @@ public class Display {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("1. Créer un compte utilisateur");
         System.out.println("2. Se connecter");
+        System.out.println("0 pour revenir en arrière");
 
         String chosenNumberString2 = myObj.next(); // receiving user answer in String
         Integer chosenNumber2 = null;
 
+        if (!chosenNumberString2.equals("0")) {
 
-        try { // try to parse user answer to check if Integer
-            chosenNumber2 = Integer.parseInt(chosenNumberString2);
-        } catch (NumberFormatException ex) {
-            System.out.println("Veuillez renseigner un nombre.");
-        }
-
-        if (chosenNumber2 != null) { // if user answer is an Integer
-            if (chosenNumber2 == 1 || chosenNumber2 == 2) {
-                return chosenNumber2;
+            try { // try to parse user answer to check if Integer
+                chosenNumber2 = Integer.parseInt(chosenNumberString2);
+            } catch (NumberFormatException ex) {
+                System.out.println("Veuillez renseigner un nombre.");
             }
+
+            if (chosenNumber2 != null) { // if user answer is an Integer
+                if (chosenNumber2 == 1 || chosenNumber2 == 2) {
+                    return chosenNumber2;
+                }
+            }
+
+            return displayCreateConnect(); // recursive
         }
 
-        return displayCreateConnect(); // recursive
+        return displayUserTypeMenu();
     }
 
 
@@ -88,7 +93,6 @@ public class Display {
                 User accountOwner = User.listeUsers.get(User.findIndexUser(compteUnit.getIdentifiantUser())); // finding object User of the owner of the account
 
                 // print out account description accordingly
-                //TODO : try to make it less heavy by using StringBuilder & append ?
                 System.out.println("Compte n° " + compteUnit.getCode() + ", solde : " + compteUnit.getSolde() + "€, " + ((compteUnit instanceof Courant ? ("Découvert autorisé : " + ((Courant) compteUnit).getDecouvert() + "€") : ("Taux d'intérêts : " + ((Epargne) compteUnit).getTauxInteret() + "%"))) + (userType == 2 ? ", appartenant à " + accountOwner.getSurname() + " " + accountOwner.getFirstname() + ", Activé = " + (compteUnit.isActivated() ? "oui" : "non") : ""));
             }
         }

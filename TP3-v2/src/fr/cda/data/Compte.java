@@ -120,13 +120,14 @@ public class Compte {
                 System.out.println("Choix incorrect.");
                 createAccount(idUser); // recursive
             } else {
-                System.out.println("Code du compte - 2 caractères minimum (0 pour arrêter)");
+                System.out.println("Code du compte - 3 caractères minimum (0 pour arrêter)");
                 String codeCompte = myObj.next();
 
+                if (codeCompte.length() > 2) {
                     Integer indexCompte = findIndexCompte(codeCompte);
 
                     // if account code does not exist already
-                    if (indexCompte == -1 || codeCompte.length() < 1) {
+                    if (indexCompte == -1) {
                         System.out.println("Solde du compte");
                         String soldeCompteString = myObj.next(); // receiving user answer in String
                         Double soldeCompte = null;
@@ -149,9 +150,13 @@ public class Compte {
 
                         }
                     } else {
-                        System.out.println("Code du compte non valide (déjà pris ou trop court).");
+                        System.out.println("Code du compte déjà pris.");
                         createAccount(idUser); // recursive
                     }
+                } else {
+                    System.out.println("Le code du compte doit comporter 3 caractères minimum.");
+                    createAccount(idUser); // recursive
+                }
             }
         }
     }
