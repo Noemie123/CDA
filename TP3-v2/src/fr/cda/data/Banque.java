@@ -5,13 +5,7 @@ import java.util.Scanner;
 
 public class Banque {
 
-    /**************************
-     *                        *
-     *       ATTRIBUTES       *
-     *                        *
-     **************************/
-
-    public static ArrayList<Compte> listeComptes = new ArrayList<>();
+    private static ArrayList<Compte> listeComptes = new ArrayList<>();
     public static ArrayList<User> listeUsers = new ArrayList<>();
     public static User currentUser;
 
@@ -58,4 +52,16 @@ public class Banque {
 
     }
 
+    /**************************
+     *                        *
+     *       ATTRIBUTES       *
+     *                        *
+     **************************/
+    public static ArrayList<Compte> getListeComptes() {
+        return listeComptes;
+    }
+
+    public static void setListeComptes(ArrayList<Compte> listeComptes) {
+        Banque.listeComptes = listeComptes;
+    }
 }

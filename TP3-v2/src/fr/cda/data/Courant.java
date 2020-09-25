@@ -19,8 +19,8 @@ public class Courant extends Compte {
      *                        *
      **************************/
 
-    public Courant (String code, Double solde, boolean activated, String identifiantUser, Double decouvert) {
-        super(code, solde, activated, identifiantUser);
+    public Courant (String code, Double solde, boolean activated, User connectedUser, Double decouvert) {
+        super(code, solde, activated, connectedUser);
         this.decouvert = decouvert;
     }
 

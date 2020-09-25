@@ -87,19 +87,19 @@ public class Operations {
     /**
      * Method to credit a selected account of an amount given by user, including saving operations into an array
      */
-    public static void versement(String identifiantUser) {
+    public static void versement(User connectedUser) {
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte (0 pour arrêter)");
         String numeroCompteChoisi = myObj.next();
 
 
         if (!numeroCompteChoisi.equals("0")) {
-            Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompteChoisi);
+            Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompteChoisi, connectedUser); // index in user's own array of accounts
 
 
             if (indexCompteChoisi != -1) { // if account exists
-                // if account is the user's account and if account was activated beforehand
-                if (!Banque.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser) || !Banque.listeComptes.get(indexCompteChoisi).isActivated()) {
+                // if account was activated beforehand
+                if (!((Client)connectedUser).getListeComptesClient().get(indexCompteChoisi).isActivated()) {
                     System.out.println("Compte indisponible.");
                 } else {
 
@@ -112,17 +112,17 @@ public class Operations {
                         montantVersement = Double.parseDouble(montantVersementString);
                     } catch (NumberFormatException ex) {
                         System.out.println("Veuillez renseigner un nombre.");
-                        versement(identifiantUser); // recursive
+                        versement(connectedUser); // recursive
                     }
 
                     if (montantVersement != null) { // if user answer is a Double
-                        Compte compteChoisi = Banque.listeComptes.get(indexCompteChoisi);
+                        Compte compteChoisi = ((Client)connectedUser).getListeComptesClient().get(indexCompteChoisi); // index of the connected user array of accounts
                         Double soldePrecedent = compteChoisi.getSolde();
                         compteChoisi.setSolde(soldePrecedent + montantVersement);
                         Double nouveauSolde = compteChoisi.getSolde();
 
                         // saving operation
-                        saveOperations(compteChoisi, montantVersement, "versement", identifiantUser);
+                        saveOperations(compteChoisi, montantVersement, "versement", connectedUser.identifiant);
 
 
                         System.out.println("Le compte a bien été crédité de " + montantVersement + "€. Nouveau solde : " + nouveauSolde + "€ (ancien : " + soldePrecedent + ").");
@@ -138,17 +138,17 @@ public class Operations {
     /**
      * Method to debit a selected account of an amount given by user - checking if withdrawal is possible (overdraft) and including saving operations into an array
      */
-    public static void retrait(String identifiantUser) {
+    public static void retrait(User connectedUser) {
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte (0 pour arrêter)");
-        String numeroCompte = myObj.next();
+        String numeroCompteChoisi = myObj.next();
 
-        if (!numeroCompte.equals("0")) {
-            Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompte);
+        if (!numeroCompteChoisi.equals("0")) {
+            Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompteChoisi, connectedUser); // index in user's own array of accounts
 
             if (indexCompteChoisi != -1) {// if account exists
-                // if account is the user's account and if account was activated beforehand
-                if (!Banque.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser) || !Banque.listeComptes.get(indexCompteChoisi).isActivated()) {
+                // if account was activated beforehand
+                if (!((Client)connectedUser).getListeComptesClient().get(indexCompteChoisi).isActivated()) {
                     System.out.println("Compte indisponible.");
                 } else {
 
@@ -161,11 +161,11 @@ public class Operations {
                         montantRetrait = Double.parseDouble(montantRetraitString);
                     } catch (NumberFormatException ex) {
                         System.out.println("Veuillez renseigner un nombre.");
-                        retrait(identifiantUser); // recursive
+                        retrait(connectedUser); // recursive
                     }
 
                     if (montantRetrait != null) { // if user answer is a Double
-                    Compte compteChoisi = Banque.listeComptes.get(indexCompteChoisi);
+                    Compte compteChoisi = ((Client)connectedUser).getListeComptesClient().get(indexCompteChoisi); // index of the connected user array of accounts
                     Double soldePrecedent = compteChoisi.getSolde();
 
 
@@ -175,7 +175,7 @@ public class Operations {
                         Double nouveauSolde = compteChoisi.getSolde();
 
                         // saving operation
-                        saveOperations(compteChoisi, montantRetrait, "retrait", identifiantUser);
+                        saveOperations(compteChoisi, montantRetrait, "retrait", connectedUser.identifiant);
 
                         System.out.println("Le compte a bien été débité de " + montantRetrait + "€. Nouveau solde : " + nouveauSolde + " (ancien : " + soldePrecedent + "€).");
 
@@ -195,7 +195,7 @@ public class Operations {
     /**
      * Method to credit a selected account of an amount given by user and debit another account - checking if withdrawal is possible (overdraft) and including saving operations into an array
      */
-    public static void virement(String identifiantUser, Integer typeUser) {
+    public static void virement(User connectedUser, Integer typeUser) {
 
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte 1 (à débiter) (0 pour arrêter)");
@@ -203,9 +203,11 @@ public class Operations {
 
 
         if (!numeroCompte.equals("0")) {
-            Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompte);
+            Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompte); // find index in global array
+
+
             // if account exists and account is the user's account (if user is customer) and if account was activated beforehand
-            if (indexCompteChoisi == -1 || (typeUser == 1 && !Banque.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser)) || !Banque.listeComptes.get(indexCompteChoisi).isActivated()) {
+            if (indexCompteChoisi == -1 || (typeUser == 1 && !Banque.getListeComptes().get(indexCompteChoisi).getOwner().equals(connectedUser)) || !Banque.getListeComptes().get(indexCompteChoisi).isActivated()) {
                 System.out.println("Compte introuvable.");
             } else {
                 System.out.println("N° du compte 2 (à créditer)");
@@ -213,11 +215,11 @@ public class Operations {
                 Integer indexCompteChoisi2 = Compte.findIndexCompte(numeroCompte2);
 
                 // if account does not exist AND if account not activated
-                if (indexCompteChoisi2 == -1 || !Banque.listeComptes.get(indexCompteChoisi2).isActivated()) {
+                if (indexCompteChoisi2 == -1 || !Banque.getListeComptes().get(indexCompteChoisi2).isActivated()) {
                     System.out.println("Compte introuvable.");
                 } else if (indexCompteChoisi.equals(indexCompteChoisi2)) { // if bank transfer on the same account
                     System.out.println("Vous ne pouvez pas effectuer de virement sur le même compte.");
-                    virement(identifiantUser, typeUser); // recursive
+                    virement(connectedUser, typeUser); // recursive
                 } else {
 
                     System.out.println("Montant de virement");
@@ -229,22 +231,22 @@ public class Operations {
                         montantVirement = Double.parseDouble(montantVirementString);
                     } catch (NumberFormatException ex) {
                         System.out.println("Veuillez renseigner un nombre.");
-                        virement(identifiantUser, typeUser); // recursive
+                        virement(connectedUser, typeUser); // recursive
                     }
 
                     if (montantVirement != null) { // if user answer is a Double
-                        Compte compteChoisi = Banque.listeComptes.get(indexCompteChoisi);
+                        Compte compteChoisi = Banque.getListeComptes().get(indexCompteChoisi);
 
 
                         // checking that debit does cause to go overdraft if current account or below 0 if savings account on first account
                         if (compteChoisi instanceof Courant && (compteChoisi.getSolde() - montantVirement > ((Courant) compteChoisi).getDecouvert()) || (compteChoisi instanceof Epargne && (compteChoisi.getSolde() - montantVirement >= 0))) {
-                            Compte compteChoisi2 = Banque.listeComptes.get(indexCompteChoisi2);
+                            Compte compteChoisi2 = Banque.getListeComptes().get(indexCompteChoisi2);
 
                             compteChoisi.setSolde(compteChoisi.getSolde() - montantVirement);
                             compteChoisi2.setSolde(compteChoisi2.getSolde() + montantVirement);
 
-                            saveOperations(compteChoisi, montantVirement, "virement / retrait", identifiantUser);
-                            saveOperations(compteChoisi2, montantVirement, "virement / versement", identifiantUser);
+                            saveOperations(compteChoisi, montantVirement, "virement / retrait", connectedUser.identifiant);
+                            saveOperations(compteChoisi2, montantVirement, "virement / versement", connectedUser.identifiant);
 
                             System.out.println("Le virement de " + montantVirement + "€ a été effectué du compte n°" + compteChoisi.getCode() + " au compte n°" + compteChoisi2.getCode() + ".");
                         } else {

@@ -19,8 +19,8 @@ public class Epargne extends Compte {
      *                        *
      **************************/
 
-    public Epargne (String code, Double solde, boolean activated, String identifiantUser, Double tauxInteret) {
-        super(code, solde, activated, identifiantUser);
+    public Epargne (String code, Double solde, boolean activated, User connectedUser, Double tauxInteret) {
+        super(code, solde, activated, connectedUser);
         this.tauxInteret = tauxInteret;
     }
 

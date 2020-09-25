@@ -14,7 +14,7 @@ public class Compte {
     protected String code;
     protected Double solde;
     protected boolean activated;
-    protected String identifiantUser;
+    protected User owner;
 
 
     protected ArrayList<Operations> operationsArrayList = new ArrayList<>();
@@ -28,12 +28,12 @@ public class Compte {
      *                        *
      **************************/
 
-    public Compte (String code, Double solde, boolean activated, String identifiantUser) {
+    public Compte (String code, Double solde, boolean activated, User owner) {
         this.code = code;
         this.solde = solde;
         this.activated = activated;
-        this.identifiantUser = identifiantUser;
-        Banque.listeComptes.add(this);
+        this.owner = owner;
+        Banque.getListeComptes().add(this);
     }
 
 
@@ -65,8 +65,8 @@ public class Compte {
         this.activated = activated;
     }
 
-    public String getIdentifiantUser() {
-        return identifiantUser;
+    public User getOwner() {
+        return owner;
     }
 
     public ArrayList<Operations> getOperationsArrayList() {
@@ -87,8 +87,22 @@ public class Compte {
      * Method to find index of an account in the ArrayList of all accounts thanks to its code
      */
     public static Integer findIndexCompte(String codeCompte) {
-        for (int i = 0; i < Banque.listeComptes.size(); i++) {
-            if (Banque.listeComptes.get(i).getCode().equals(codeCompte)) {
+        for (int i = 0; i < Banque.getListeComptes().size(); i++) {
+            if (Banque.getListeComptes().get(i).getCode().equals(codeCompte)) {
+                return i;
+            }
+        }
+
+        return -1; // if index not found means does not exists then return -1
+    }
+
+
+    /**
+     * Method to find index of an account in the ArrayList of accounts of a specific user
+     */
+    public static Integer findIndexCompte(String codeCompte, User currentUser) {
+        for (int i = 0; i < ((Client) currentUser).getListeComptesClient().size(); i++) {
+            if (((Client) currentUser).getListeComptesClient().get(i).getCode().equals(codeCompte)) {
                 return i;
             }
         }
@@ -100,7 +114,7 @@ public class Compte {
     /**
      * Method to create an account and saving it in the ArrayList of all accounts
      */
-    public static void createAccount(String idUser) {
+    public static void createAccount(User connectedUser) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("1. Compte courant ?");
         System.out.println("2. Compte épargne ?");
@@ -116,13 +130,13 @@ public class Compte {
                 accountType = Integer.parseInt(accountTypeString);
             } catch (NumberFormatException ex) {
                 System.out.println("Veuillez renseigner un nombre.");
-                createAccount(idUser); // recursive
+                createAccount(connectedUser); // recursive
             }
 
             if (accountType != null) { // if user answer is an Integer
                 if (accountType != 1 && accountType != 2) {
                     System.out.println("Choix incorrect.");
-                    createAccount(idUser); // recursive
+                    createAccount(connectedUser); // recursive
                 } else {
                     System.out.println("Code du compte - 3 caractères minimum (0 pour arrêter)");
                     String codeCompte = myObj.next();
@@ -141,28 +155,27 @@ public class Compte {
                                 soldeCompte = Double.parseDouble(soldeCompteString);
                             } catch (NumberFormatException ex) {
                                 System.out.println("Veuillez renseigner un nombre.");
-                                createAccount(idUser);
+                                createAccount(connectedUser);
                             }
 
                             if (soldeCompte != null) { // if user answer is a Double
-                                Client currUser = (Client) Banque.listeUsers.get(User.findIndexUser(idUser));
 
                                 if (accountType == 1) { // if account is current account
-                                    Courant compteCourant = new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
-                                    currUser.getListeComptesClient().add(compteCourant);
+                                    Courant compteCourant = new Courant(codeCompte, soldeCompte, false, connectedUser, -150.0);
+                                    ((Client)connectedUser).getListeComptesClient().add(compteCourant);
                                 } else { // if account is savings account
-                                    Epargne compteEpargne = new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
-                                    currUser.getListeComptesClient().add(compteEpargne);
+                                    Epargne compteEpargne = new Epargne(codeCompte, soldeCompte, false, connectedUser, 2.50);
+                                    ((Client)connectedUser).getListeComptesClient().add(compteEpargne);
                                 }
 
                             }
                         } else {
                             System.out.println("Code du compte déjà pris.");
-                            createAccount(idUser); // recursive
+                            createAccount(connectedUser); // recursive
                         }
                     } else {
                         System.out.println("Le code du compte doit comporter 3 caractères minimum.");
-                        createAccount(idUser); // recursive
+                        createAccount(connectedUser); // recursive
                     }
                 }
             }
@@ -176,7 +189,7 @@ public class Compte {
     /**
      * Method to display the list of operations (either a part or whole) and calculating the total amount for each type of operations
      */
-    public static void displayOperationAmount(Integer typeDisplay, Integer typeUser, String identifiantUser) {
+    public static void displayOperationAmount(Integer typeDisplay, Integer typeUser, User connectedUser) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Entrez le n° du compte pour afficher le montant des versements.");
 
@@ -184,8 +197,8 @@ public class Compte {
         Integer indexCompteChoisi = Compte.findIndexCompte(accountCode);
 
         // if account exists + user is advisor OR user is customer and the account is his
-        if (indexCompteChoisi != -1 && (typeUser == 2 || (typeUser == 1 && (Banque.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser))))) {
-            Compte compteChoisi = Banque.listeComptes.get(indexCompteChoisi);
+        if (indexCompteChoisi != -1 && (typeUser == 2 || (typeUser == 1 && (Banque.getListeComptes().get(indexCompteChoisi).getOwner().equals(connectedUser))))) {
+            Compte compteChoisi = Banque.getListeComptes().get(indexCompteChoisi);
             Double amountVersement = 0.0;
             Double amountRetrait = 0.0;
 

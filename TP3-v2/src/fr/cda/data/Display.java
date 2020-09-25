@@ -70,18 +70,15 @@ public class Display {
     /**
      * Method to display list of accounts according to type of current user
      */
-    private static void displayListeCompte(Integer userType) {
-        ArrayList<Compte> listeDesComptes = new ArrayList<>();
+    private static void displayListeCompte(Integer userType, User connectedUser) {
+        ArrayList<Compte> listeDesComptes;
 
-        if (userType == 1) { // if user is a customer - select only his accounts
-            for (Compte compt : Banque.listeComptes) {
-                if (compt.getIdentifiantUser().equals(Banque.currentUser.getIdentifiant()) && compt.isActivated()) {
-                    listeDesComptes.add(compt);
-                }
-            }
-        } else if (userType == 2) { // if user is a customer - select all the accounts
-            listeDesComptes = Banque.listeComptes;
+        if (connectedUser instanceof Client) { // if user is a customer - select only his accounts
+            listeDesComptes = ((Client) connectedUser).listeComptesClient;
+        } else {
+            listeDesComptes = Banque.getListeComptes();
         }
+
 
         if (listeDesComptes.isEmpty()) {
             System.out.println("Aucun compte à afficher.");
@@ -90,7 +87,7 @@ public class Display {
                 if (compteUnit instanceof Epargne) {
                     compteUnit.setSolde(compteUnit.getSolde() + (((Epargne) compteUnit).getTauxInteret() * compteUnit.getSolde())); // changing account balance - adding interest rate amount
                 }
-                User accountOwner = Banque.listeUsers.get(User.findIndexUser(compteUnit.getIdentifiantUser())); // finding object User of the owner of the account
+                User accountOwner = compteUnit.owner; // finding object User of the owner of the account
 
                 // print out account description accordingly
                 System.out.println("Compte n° " + compteUnit.getCode() + ", solde : " + compteUnit.getSolde() + "€, " + ((compteUnit instanceof Courant ? ("Découvert autorisé : " + ((Courant) compteUnit).getDecouvert() + "€") : ("Taux d'intérêts : " + ((Epargne) compteUnit).getTauxInteret() + "%"))) + (userType == 2 ? ", appartenant à " + accountOwner.getSurname() + " " + accountOwner.getFirstname() + ", Activé = " + (compteUnit.isActivated() ? "oui" : "non") : ""));
@@ -136,28 +133,28 @@ public class Display {
                     App.run();
                     break;
                 case 1:
-                    Compte.createAccount(Banque.currentUser.getIdentifiant());
+                    Compte.createAccount(connectedUser);
                     break;
                 case 2:
-                    Operations.versement(Banque.currentUser.getIdentifiant());
+                    Operations.versement(connectedUser);
                     break;
                 case 3:
-                    Operations.retrait(Banque.currentUser.getIdentifiant());
+                    Operations.retrait(connectedUser);
                     break;
                 case 4:
-                    Operations.virement(Banque.currentUser.getIdentifiant(), 1);
+                    Operations.virement(connectedUser, 1);
                     break;
                 case 5:
-                    Display.displayListeCompte(1);
+                    Display.displayListeCompte(1, connectedUser);
                     break;
                 case 6:
-                    Compte.displayOperationAmount(3, 1, Banque.currentUser.getIdentifiant());
+                    Compte.displayOperationAmount(3, 1, Banque.currentUser);
                     break;
                 case 7:
-                    Compte.displayOperationAmount(1, 1, Banque.currentUser.getIdentifiant());
+                    Compte.displayOperationAmount(1, 1, Banque.currentUser);
                     break;
                 case 8:
-                    Compte.displayOperationAmount(2, 1, Banque.currentUser.getIdentifiant());
+                    Compte.displayOperationAmount(2, 1, Banque.currentUser);
                     break;
                 default:
                     System.out.println("Ce choix n'existe pas.");
@@ -202,10 +199,10 @@ public class Display {
                     Conseiller.activeAccount();
                     break;
                 case 2:
-                    Operations.virement(Banque.currentUser.getIdentifiant(), 2);
+                    Operations.virement(connectedUser, 2);
                     break;
                 case 3:
-                    Display.displayListeCompte(2);
+                    Display.displayListeCompte(2, connectedUser);
                     break;
                 case 4:
                     Conseiller.changeInterest();
@@ -214,7 +211,7 @@ public class Display {
                     Conseiller.changeOverdraft();
                     break;
                 case 6:
-                    Compte.displayOperationAmount(3, 2, Banque.currentUser.getIdentifiant());
+                    Compte.displayOperationAmount(3, 2, Banque.currentUser);
                     break;
                 default:
                     System.out.println("Ce choix n'existe pas.");
