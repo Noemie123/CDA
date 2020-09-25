@@ -34,7 +34,6 @@ public class Compte {
         this.activated = activated;
         this.identifiantUser = identifiantUser;
         Banque.listeComptes.add(this);
-        Client.listeComptesClient.add(this);
     }
 
 
@@ -146,11 +145,14 @@ public class Compte {
                             }
 
                             if (soldeCompte != null) { // if user answer is a Double
+                                Client currUser = (Client) Banque.listeUsers.get(User.findIndexUser(idUser));
 
                                 if (accountType == 1) { // if account is current account
-                                    new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
+                                    Courant compteCourant = new Courant(codeCompte, soldeCompte, false, idUser, -150.0);
+                                    currUser.getListeComptesClient().add(compteCourant);
                                 } else { // if account is savings account
-                                    new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
+                                    Epargne compteEpargne = new Epargne(codeCompte, soldeCompte, false, idUser, 2.50);
+                                    currUser.getListeComptesClient().add(compteEpargne);
                                 }
 
                             }

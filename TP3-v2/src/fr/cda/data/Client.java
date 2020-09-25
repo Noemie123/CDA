@@ -1,6 +1,5 @@
 package fr.cda.data;
 
-
 import java.util.ArrayList;
 
 public class Client extends User {
@@ -11,7 +10,7 @@ public class Client extends User {
      *                        *
      **************************/
 
-    public static ArrayList<Compte> listeComptesClient = new ArrayList<>();
+    protected ArrayList<Compte> listeComptesClient = new ArrayList<>();
 
 
     /**************************
@@ -24,4 +23,8 @@ public class Client extends User {
         super(surname, firstname, identifiant, mdp);
     }
 
+
+    public ArrayList<Compte> getListeComptesClient() {
+        return listeComptesClient;
+    }
 }

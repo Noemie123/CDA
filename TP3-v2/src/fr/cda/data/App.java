@@ -13,17 +13,17 @@ public class App {
             run();
 
         } else if (createConnectChoice == 2) {  // if user wants to connect
-            boolean connected = User.connect(userType);
+            boolean connected = Banque.connect(userType);
 
 
             if (connected) { // if connection is okay
                 System.out.println("Connecté");
-
+                User userConnected = Banque.currentUser;
 
                 if (userType == 1) {  // if user is a customer
-                    Display.displayCustomerMenu();
+                    Display.displayCustomerMenu(userConnected);
                 } else if (userType == 2) { // if user is an advisor
-                    Display.displayAdvisorMenu();
+                    Display.displayAdvisorMenu(userConnected);
                 }
 
 

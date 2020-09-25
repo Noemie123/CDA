@@ -75,7 +75,7 @@ public class Display {
 
         if (userType == 1) { // if user is a customer - select only his accounts
             for (Compte compt : Banque.listeComptes) {
-                if (compt.getIdentifiantUser().equals(Banque.currUser.getIdentifiant()) && compt.isActivated()) {
+                if (compt.getIdentifiantUser().equals(Banque.currentUser.getIdentifiant()) && compt.isActivated()) {
                     listeDesComptes.add(compt);
                 }
             }
@@ -104,7 +104,9 @@ public class Display {
     /**
      * Method to display menu if current user is a customer + reactions regarding menu choice
      */
-    public static void displayCustomerMenu() {
+    public static void displayCustomerMenu(User connectedUser) {
+
+
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("1. Créer un compte");
         System.out.println("2. Versement");
@@ -134,42 +136,42 @@ public class Display {
                     App.run();
                     break;
                 case 1:
-                    Compte.createAccount(Banque.currUser.getIdentifiant());
+                    Compte.createAccount(Banque.currentUser.getIdentifiant());
                     break;
                 case 2:
-                    Operations.versement(Banque.currUser.getIdentifiant());
+                    Operations.versement(Banque.currentUser.getIdentifiant());
                     break;
                 case 3:
-                    Operations.retrait(Banque.currUser.getIdentifiant());
+                    Operations.retrait(Banque.currentUser.getIdentifiant());
                     break;
                 case 4:
-                    Operations.virement(Banque.currUser.getIdentifiant(), 1);
+                    Operations.virement(Banque.currentUser.getIdentifiant(), 1);
                     break;
                 case 5:
                     Display.displayListeCompte(1);
                     break;
                 case 6:
-                    Compte.displayOperationAmount(3, 1, Banque.currUser.getIdentifiant());
+                    Compte.displayOperationAmount(3, 1, Banque.currentUser.getIdentifiant());
                     break;
                 case 7:
-                    Compte.displayOperationAmount(1, 1, Banque.currUser.getIdentifiant());
+                    Compte.displayOperationAmount(1, 1, Banque.currentUser.getIdentifiant());
                     break;
                 case 8:
-                    Compte.displayOperationAmount(2, 1, Banque.currUser.getIdentifiant());
+                    Compte.displayOperationAmount(2, 1, Banque.currentUser.getIdentifiant());
                     break;
                 default:
                     System.out.println("Ce choix n'existe pas.");
             }
         }
 
-        displayCustomerMenu(); // recursive
+        displayCustomerMenu(connectedUser); // recursive
     }
 
 
     /**
      * Method to display menu if current user is an advisor + reactions regarding menu choice
      */
-    public static void displayAdvisorMenu() {
+    public static void displayAdvisorMenu(User connectedUser) {
 
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("1. Activer/désactiver un compte");
@@ -200,7 +202,7 @@ public class Display {
                     Conseiller.activeAccount();
                     break;
                 case 2:
-                    Operations.virement(Banque.currUser.getIdentifiant(), 2);
+                    Operations.virement(Banque.currentUser.getIdentifiant(), 2);
                     break;
                 case 3:
                     Display.displayListeCompte(2);
@@ -212,13 +214,13 @@ public class Display {
                     Conseiller.changeOverdraft();
                     break;
                 case 6:
-                    Compte.displayOperationAmount(3, 2, Banque.currUser.getIdentifiant());
+                    Compte.displayOperationAmount(3, 2, Banque.currentUser.getIdentifiant());
                     break;
                 default:
                     System.out.println("Ce choix n'existe pas.");
             }
         }
 
-        displayAdvisorMenu(); // recursive
+        displayAdvisorMenu(connectedUser); // recursive
     }
 }
