@@ -1,6 +1,5 @@
 package fr.cda.data;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class User {
@@ -16,9 +15,7 @@ public class User {
     protected String identifiant;
     protected String mdp;
 
-    public static ArrayList<User> listeUsers = new ArrayList<>();
 
-    public static User currUser;
 
 
     /**************************
@@ -33,7 +30,7 @@ public class User {
         this.identifiant = identifiant;
         this.mdp = mdp;
 
-        listeUsers.add(this);
+        Banque.listeUsers.add(this);
     }
 
 
@@ -77,8 +74,8 @@ public class User {
      * Method to find index of a user in the ArrayList of all users thanks to its id
      */
     public static Integer findIndexUser(String idUser) {
-        for (int i = 0; i < User.listeUsers.size(); i++) {
-            if (User.listeUsers.get(i).getIdentifiant().equals(idUser)) {
+        for (int i = 0; i < Banque.listeUsers.size(); i++) {
+            if (Banque.listeUsers.get(i).getIdentifiant().equals(idUser)) {
                 return i;
             }
         }
@@ -99,39 +96,72 @@ public class User {
             System.out.println("Prénom ?");
             String userFirstname = myObj.next();
 
-            System.out.println("Pseudo / Identifiant ?");
-            String userIdentifiant = myObj.next();
 
-            Integer indexUser = findIndexUser(userIdentifiant); // checking if id not used yet
+            boolean checkExists = checkUserExists(userName, userFirstname, userType);
 
-            // if id not already taken
-            if (indexUser == -1) {
-                System.out.println("Mdp ?");
-                String userMdp = myObj.next();
+            if (!checkExists) {
+                System.out.println("Pseudo / Identifiant ?");
+                String userIdentifiant = myObj.next();
 
-                System.out.println("Répéter votre mdp ?");
-                String userMdp2 = myObj.next();
+                Integer indexUser = findIndexUser(userIdentifiant); // checking if id not used yet
 
-                // if both passwords are the same
-                if (userMdp.equals(userMdp2)) { // checking if passwords are the same and then condition to create right type of user
-                    if (userType == 1) {
-                        new Client(userName, userFirstname, userIdentifiant, userMdp);
-                    } else if (userType == 2) {
-                        new Conseiller(userName, userFirstname, userIdentifiant, userMdp);
+                // if id not already taken
+                if (indexUser == -1) {
+                    System.out.println("Mdp ?");
+                    String userMdp = myObj.next();
+
+                    System.out.println("Répéter votre mdp ?");
+                    String userMdp2 = myObj.next();
+
+                    // if both passwords are the same
+                    if (userMdp.equals(userMdp2)) { // checking if passwords are the same and then condition to create right type of user
+                        if (userType == 1) {
+                            new Client(userName, userFirstname, userIdentifiant, userMdp);
+                        } else if (userType == 2) {
+                            new Conseiller(userName, userFirstname, userIdentifiant, userMdp);
+                        }
+                    } else {
+                        System.out.println("Mots de passe non identiques.");
+                        createUser(userType);
                     }
+
                 } else {
-                    System.out.println("Mots de passe non identiques.");
+                    System.out.println("Identifiant déjà utilisé.");
                     createUser(userType);
                 }
             } else {
-                System.out.println("Identifiant déjà utilisé.");
+                System.out.println("Vous avez déjà un compte.");
                 createUser(userType);
             }
         }
-
     }
 
 
+
+
+    /**
+     * Method to check user exists + except if advisor wants to create a customer account
+     */
+    public static boolean checkUserExists(String nom, String prenom, Integer userType) {
+        Integer compt = 0;
+
+        for (User user : Banque.listeUsers) {
+            if (user.getSurname().equals(nom) && user.getFirstname().equals(prenom)) {
+                if ((user instanceof Conseiller && userType == 1) || (user instanceof Client && userType == 2)) {
+                    compt++;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        if (compt > 1) {
+            return false;
+        }
+
+
+        return false;
+    }
 
 
     /**
@@ -149,13 +179,13 @@ public class User {
 
         // if exists
         if (indexUser != -1) {
-            User.currUser = User.listeUsers.get(indexUser);
+            Banque.currUser = Banque.listeUsers.get(indexUser);
 
             // if correct type
-            if ((currUser instanceof Client && userType == 1) || (currUser instanceof Conseiller && userType == 2)) {
+            if ((Banque.currUser instanceof Client && userType == 1) || (Banque.currUser instanceof Conseiller && userType == 2)) {
 
                 // if mdp is okay
-                if (currUser.getMdp().equals(mdp)) {
+                if (Banque.currUser.getMdp().equals(mdp)) {
                     return true;
                 }
 

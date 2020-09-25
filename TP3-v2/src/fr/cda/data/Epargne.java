@@ -1,23 +1,37 @@
 package fr.cda.data;
 
 public class Epargne extends Compte {
-    /**
-     * Attributes
-     */
+
+    /**************************
+     *                        *
+     *       ATTRIBUTES       *
+     *                        *
+     **************************/
+
     protected Double tauxInteret;
 
 
-    /**
-     * Constructor
-     */
+
+
+    /**************************
+     *                        *
+     *      CONSTRUCTOR       *
+     *                        *
+     **************************/
+
     public Epargne (String code, Double solde, boolean activated, String identifiantUser, Double tauxInteret) {
         super(code, solde, activated, identifiantUser);
         this.tauxInteret = tauxInteret;
     }
 
-    /**
-     * Getters & Setters
-     */
+
+
+    /**************************
+     *                        *
+     *    GETTER & SETTER     *
+     *                        *
+     **************************/
+
     public Double getTauxInteret() {
         return tauxInteret;
     }

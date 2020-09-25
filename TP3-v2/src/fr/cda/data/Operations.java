@@ -99,7 +99,7 @@ public class Operations {
 
             if (indexCompteChoisi != -1) { // if account exists
                 // if account is the user's account and if account was activated beforehand
-                if (!Compte.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser) || !Compte.listeComptes.get(indexCompteChoisi).isActivated()) {
+                if (!Banque.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser) || !Banque.listeComptes.get(indexCompteChoisi).isActivated()) {
                     System.out.println("Compte indisponible.");
                 } else {
 
@@ -116,7 +116,7 @@ public class Operations {
                     }
 
                     if (montantVersement != null) { // if user answer is a Double
-                        Compte compteChoisi = Compte.listeComptes.get(indexCompteChoisi);
+                        Compte compteChoisi = Banque.listeComptes.get(indexCompteChoisi);
                         Double soldePrecedent = compteChoisi.getSolde();
                         compteChoisi.setSolde(soldePrecedent + montantVersement);
                         Double nouveauSolde = compteChoisi.getSolde();
@@ -148,7 +148,7 @@ public class Operations {
 
             if (indexCompteChoisi != -1) {// if account exists
                 // if account is the user's account and if account was activated beforehand
-                if (!Compte.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser) || !Compte.listeComptes.get(indexCompteChoisi).isActivated()) {
+                if (!Banque.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser) || !Banque.listeComptes.get(indexCompteChoisi).isActivated()) {
                     System.out.println("Compte indisponible.");
                 } else {
 
@@ -165,7 +165,7 @@ public class Operations {
                     }
 
                     if (montantRetrait != null) { // if user answer is a Double
-                    Compte compteChoisi = Compte.listeComptes.get(indexCompteChoisi);
+                    Compte compteChoisi = Banque.listeComptes.get(indexCompteChoisi);
                     Double soldePrecedent = compteChoisi.getSolde();
 
 
@@ -205,7 +205,7 @@ public class Operations {
         if (!numeroCompte.equals("0")) {
             Integer indexCompteChoisi = Compte.findIndexCompte(numeroCompte);
             // if account exists and account is the user's account (if user is customer) and if account was activated beforehand
-            if (indexCompteChoisi == -1 || (typeUser == 1 && !Compte.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser)) || !Compte.listeComptes.get(indexCompteChoisi).isActivated()) {
+            if (indexCompteChoisi == -1 || (typeUser == 1 && !Banque.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser)) || !Banque.listeComptes.get(indexCompteChoisi).isActivated()) {
                 System.out.println("Compte introuvable.");
             } else {
                 System.out.println("N° du compte 2 (à créditer)");
@@ -213,7 +213,7 @@ public class Operations {
                 Integer indexCompteChoisi2 = Compte.findIndexCompte(numeroCompte2);
 
                 // if account does not exist AND if account not activated
-                if (indexCompteChoisi2 == -1 || !Compte.listeComptes.get(indexCompteChoisi2).isActivated()) {
+                if (indexCompteChoisi2 == -1 || !Banque.listeComptes.get(indexCompteChoisi2).isActivated()) {
                     System.out.println("Compte introuvable.");
                 } else if (indexCompteChoisi.equals(indexCompteChoisi2)) { // if bank transfer on the same account
                     System.out.println("Vous ne pouvez pas effectuer de virement sur le même compte.");
@@ -233,12 +233,12 @@ public class Operations {
                     }
 
                     if (montantVirement != null) { // if user answer is a Double
-                        Compte compteChoisi = Compte.listeComptes.get(indexCompteChoisi);
+                        Compte compteChoisi = Banque.listeComptes.get(indexCompteChoisi);
 
 
                         // checking that debit does cause to go overdraft if current account or below 0 if savings account on first account
                         if (compteChoisi instanceof Courant && (compteChoisi.getSolde() - montantVirement > ((Courant) compteChoisi).getDecouvert()) || (compteChoisi instanceof Epargne && (compteChoisi.getSolde() - montantVirement >= 0))) {
-                            Compte compteChoisi2 = Compte.listeComptes.get(indexCompteChoisi2);
+                            Compte compteChoisi2 = Banque.listeComptes.get(indexCompteChoisi2);
 
                             compteChoisi.setSolde(compteChoisi.getSolde() - montantVirement);
                             compteChoisi2.setSolde(compteChoisi2.getSolde() + montantVirement);

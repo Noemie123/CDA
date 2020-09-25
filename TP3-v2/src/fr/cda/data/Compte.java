@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Compte {
+
     /**************************
      *                        *
      *       ATTRIBUTES       *
@@ -15,7 +16,7 @@ public class Compte {
     protected boolean activated;
     protected String identifiantUser;
 
-    public static ArrayList<Compte> listeComptes = new ArrayList<>();
+
     protected ArrayList<Operations> operationsArrayList = new ArrayList<>();
 
 
@@ -32,7 +33,8 @@ public class Compte {
         this.solde = solde;
         this.activated = activated;
         this.identifiantUser = identifiantUser;
-        listeComptes.add(this);
+        Banque.listeComptes.add(this);
+        Client.listeComptesClient.add(this);
     }
 
 
@@ -86,8 +88,8 @@ public class Compte {
      * Method to find index of an account in the ArrayList of all accounts thanks to its code
      */
     public static Integer findIndexCompte(String codeCompte) {
-        for (int i = 0; i < Compte.listeComptes.size(); i++) {
-            if (Compte.listeComptes.get(i).getCode().equals(codeCompte)) {
+        for (int i = 0; i < Banque.listeComptes.size(); i++) {
+            if (Banque.listeComptes.get(i).getCode().equals(codeCompte)) {
                 return i;
             }
         }
@@ -180,8 +182,8 @@ public class Compte {
         Integer indexCompteChoisi = Compte.findIndexCompte(accountCode);
 
         // if account exists + user is advisor OR user is customer and the account is his
-        if (indexCompteChoisi != -1 && (typeUser == 2 || (typeUser == 1 && (Compte.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser))))) {
-            Compte compteChoisi = Compte.listeComptes.get(indexCompteChoisi);
+        if (indexCompteChoisi != -1 && (typeUser == 2 || (typeUser == 1 && (Banque.listeComptes.get(indexCompteChoisi).getIdentifiantUser().equals(identifiantUser))))) {
+            Compte compteChoisi = Banque.listeComptes.get(indexCompteChoisi);
             Double amountVersement = 0.0;
             Double amountRetrait = 0.0;
 

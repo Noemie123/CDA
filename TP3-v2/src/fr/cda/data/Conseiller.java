@@ -34,7 +34,7 @@ public class Conseiller extends User {
         String accountCode = myObj.next();
 
         if (!accountCode.equals("0")) {
-            ArrayList<Compte> listeDesComptes = Compte.listeComptes;
+            ArrayList<Compte> listeDesComptes = Banque.listeComptes;
 
             for (Compte compt : listeDesComptes) {
                 if (compt.getCode().equals(accountCode)) {
@@ -69,8 +69,8 @@ public class Conseiller extends User {
 
         if (!accountCode.equals("0")) {
             Integer indexCompte = Compte.findIndexCompte(accountCode); // checking the account exists
-            if (indexCompte != -1 && Compte.listeComptes.get(indexCompte).isActivated()) {
-                Compte compte = Compte.listeComptes.get(indexCompte);
+            if (indexCompte != -1 && Banque.listeComptes.get(indexCompte).isActivated()) {
+                Compte compte = Banque.listeComptes.get(indexCompte);
 
                 if (compte instanceof Epargne) { // checking the account is a savings one
                     System.out.println("Entrez le nouveau taux d'intérêts");
@@ -111,8 +111,8 @@ public class Conseiller extends User {
 
         if (!accountCode.equals("0")) {
             Integer indexCompte = Compte.findIndexCompte(accountCode); // checking the account exists
-            if (indexCompte != -1 && Compte.listeComptes.get(indexCompte).isActivated()) {
-                Compte compte = Compte.listeComptes.get(indexCompte);
+            if (indexCompte != -1 && Banque.listeComptes.get(indexCompte).isActivated()) {
+                Compte compte = Banque.listeComptes.get(indexCompte);
 
                 if (compte instanceof Courant) { // checking account is a current one
                     System.out.println("Entrez le nouveau montant du découvert autorisé");

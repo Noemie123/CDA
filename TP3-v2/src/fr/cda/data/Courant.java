@@ -2,16 +2,23 @@ package fr.cda.data;
 
 
 public class Courant extends Compte {
-    /**
-     * Attributes
-     */
+
+    /**************************
+     *                        *
+     *       ATTRIBUTES       *
+     *                        *
+     **************************/
+
     protected Double decouvert;
 
 
 
-    /**
-     * Constructor
-     */
+    /**************************
+     *                        *
+     *      CONSTRUCTOR       *
+     *                        *
+     **************************/
+
     public Courant (String code, Double solde, boolean activated, String identifiantUser, Double decouvert) {
         super(code, solde, activated, identifiantUser);
         this.decouvert = decouvert;
@@ -19,9 +26,12 @@ public class Courant extends Compte {
 
 
 
-    /**
-     * Getters & Setters
-     */
+    /**************************
+     *                        *
+     *    GETTER & SETTER     *
+     *                        *
+     **************************/
+
     public Double getDecouvert() {
         return decouvert;
     }
