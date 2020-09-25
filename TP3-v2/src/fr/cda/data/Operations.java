@@ -212,8 +212,8 @@ public class Operations {
                 String numeroCompte2 = myObj.next();
                 Integer indexCompteChoisi2 = Compte.findIndexCompte(numeroCompte2);
 
-                // if account does not exist OR the account is not the current customer's AND if account not activated
-                if (indexCompteChoisi2 == -1 || (typeUser == 1 && !Compte.listeComptes.get(indexCompteChoisi2).getIdentifiantUser().equals(identifiantUser)) || !Compte.listeComptes.get(indexCompteChoisi2).isActivated()) {
+                // if account does not exist AND if account not activated
+                if (indexCompteChoisi2 == -1 || !Compte.listeComptes.get(indexCompteChoisi2).isActivated()) {
                     System.out.println("Compte introuvable.");
                 } else if (indexCompteChoisi.equals(indexCompteChoisi2)) { // if bank transfer on the same account
                     System.out.println("Vous ne pouvez pas effectuer de virement sur le même compte.");
