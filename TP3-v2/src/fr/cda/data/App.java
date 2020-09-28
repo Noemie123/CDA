@@ -9,11 +9,11 @@ public class App {
 
 
         if (createConnectChoice == 1) { // if create user account
-            User.createUser(userType);
+            Auth.createUser(userType);
             run();
 
         } else if (createConnectChoice == 2) {  // if user wants to connect
-            boolean connected = Banque.connect(userType);
+            boolean connected = Auth.connect(userType);
 
 
             if (connected) { // if connection is okay

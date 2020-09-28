@@ -128,36 +128,41 @@ public class Display {
 
         if (userChoice != null) { // if user answer is an Integer
 
-            switch (userChoice) {
-                case 0:
-                    App.run();
-                    break;
-                case 1:
-                    Compte.createAccount(connectedUser);
-                    break;
-                case 2:
-                    Operations.versement(connectedUser);
-                    break;
-                case 3:
-                    Operations.retrait(connectedUser);
-                    break;
-                case 4:
-                    Operations.virement(connectedUser, 1);
-                    break;
-                case 5:
-                    Display.displayListeCompte(1, connectedUser);
-                    break;
-                case 6:
-                    Compte.displayOperationAmount(3, 1, Banque.currentUser);
-                    break;
-                case 7:
-                    Compte.displayOperationAmount(1, 1, Banque.currentUser);
-                    break;
-                case 8:
-                    Compte.displayOperationAmount(2, 1, Banque.currentUser);
-                    break;
-                default:
-                    System.out.println("Ce choix n'existe pas.");
+            // if connected user is a customer but have not created an account yet
+            if (userChoice != 0 && userChoice != 1 && connectedUser instanceof Client && (((Client) connectedUser).listeComptesClient.isEmpty())) {
+                System.out.println("Vous n'avez aucun compte actif. Veuillez en créer un ou attendre que votre conseiller accède à votre demande.");
+            } else {
+                switch (userChoice) {
+                    case 0:
+                        App.run();
+                        break;
+                    case 1:
+                        Banking.createAccount(connectedUser);
+                        break;
+                    case 2:
+                        Banking.versement(connectedUser);
+                        break;
+                    case 3:
+                        Banking.retrait(connectedUser);
+                        break;
+                    case 4:
+                        Banking.virement(connectedUser, 1);
+                        break;
+                    case 5:
+                        Display.displayListeCompte(1, connectedUser);
+                        break;
+                    case 6:
+                        Display.displayOperationAmount(3, 1, Banque.currentUser);
+                        break;
+                    case 7:
+                        Display.displayOperationAmount(1, 1, Banque.currentUser);
+                        break;
+                    case 8:
+                        Display.displayOperationAmount(2, 1, Banque.currentUser);
+                        break;
+                    default:
+                        System.out.println("Ce choix n'existe pas.");
+                }
             }
         }
 
@@ -196,22 +201,22 @@ public class Display {
                     App.run();
                     break;
                 case 1:
-                    Conseiller.activeAccount();
+                    Banking.activeAccount();
                     break;
                 case 2:
-                    Operations.virement(connectedUser, 2);
+                    Banking.virement(connectedUser, 2);
                     break;
                 case 3:
                     Display.displayListeCompte(2, connectedUser);
                     break;
                 case 4:
-                    Conseiller.changeInterest();
+                    Banking.changeInterest();
                     break;
                 case 5:
-                    Conseiller.changeOverdraft();
+                    Banking.changeOverdraft();
                     break;
                 case 6:
-                    Compte.displayOperationAmount(3, 2, Banque.currentUser);
+                    Display.displayOperationAmount(3, 2, Banque.currentUser);
                     break;
                 default:
                     System.out.println("Ce choix n'existe pas.");
@@ -219,5 +224,60 @@ public class Display {
         }
 
         displayAdvisorMenu(connectedUser); // recursive
+    }
+
+
+    /**
+     * Method to display the list of operations (either a part or whole) and calculating the total amount for each type of operations
+     */
+    public static void displayOperationAmount(Integer typeDisplay, Integer typeUser, User connectedUser) {
+        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+        System.out.println("Entrez le n° du compte pour afficher le montant des versements.");
+
+        String accountCode = myObj.next();
+        Integer indexCompteChoisi = Finder.findIndexCompte(accountCode);
+
+        // if account exists + user is advisor OR user is customer and the account is his
+        if (indexCompteChoisi != -1 && (typeUser == 2 || (typeUser == 1 && (Banque.getListeComptes().get(indexCompteChoisi).getOwner().equals(connectedUser))))) {
+            Compte compteChoisi = Banque.getListeComptes().get(indexCompteChoisi);
+            Double amountVersement = 0.0;
+            Double amountRetrait = 0.0;
+
+            if (typeDisplay == 1 || typeDisplay == 3) { // if chose to show debit or both
+                for (int i = 0; i < compteChoisi.getOperationsArrayList().size(); i++) {
+                    Operations currInstance = compteChoisi.getOperationsArrayList().get(i);
+                    if (currInstance.getType().equals("versement") || currInstance.getType().equals("virement / versement") ) {
+                        System.out.println(currInstance.getDate() + " - " + currInstance.getType() + " de " + currInstance.getMontant() + " €, effectué par " + currInstance.getIdentifiantUser());
+                        amountVersement += currInstance.getMontant(); // calculating the total amount of debit
+                    }
+                }
+            }
+
+            if (amountVersement != 0) {
+                System.out.println("Le montant des versements et de " + amountVersement + " €.\n");
+            } else if (typeDisplay != 2){
+                System.out.println("Aucun versement à afficher.\n");
+            }
+
+
+            if (typeDisplay == 2 || typeDisplay == 3) { // if chose to show credit or both
+                for (int i = 0; i < compteChoisi.getOperationsArrayList().size(); i++) {
+                    Operations currInstance = compteChoisi.getOperationsArrayList().get(i);
+                    if (currInstance.getType().equals("retrait") || currInstance.getType().equals("virement / retrait") ) {
+                        System.out.println(currInstance.getDate() + " - " + currInstance.getType() + " de " + currInstance.getMontant() + " €, effectué par " + currInstance.getIdentifiantUser());
+                        amountRetrait += currInstance.getMontant(); // calculating the total amount of credit
+                    }
+                }
+            }
+
+            if (amountRetrait != 0) {
+                System.out.println("Le montant des retraits et de " + amountRetrait + " €.\n");
+            } else if (typeDisplay !=1) {
+                System.out.println("Aucun retrait à afficher.\n");
+            }
+
+        } else {
+            System.out.println("Compte introuvable.");
+        }
     }
 }
