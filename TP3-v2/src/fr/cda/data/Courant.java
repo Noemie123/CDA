@@ -1,7 +1,9 @@
 package fr.cda.data;
 
 
-public class Courant extends Compte {
+import java.io.Serializable;
+
+public class Courant extends Compte implements Serializable  {
 
     /**************************
      *                        *

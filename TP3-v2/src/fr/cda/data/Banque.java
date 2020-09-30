@@ -26,10 +26,39 @@ public class Banque {
         return listeComptes;
     }
 
+    public static ArrayList<Object> getListeComptesObj() {
+        ArrayList<Object> arrObj = new ArrayList<>();
 
+        for (Compte compt : listeComptes) {
+            arrObj.add((Object) compt);
+        }
 
+        return arrObj;
+    }
 
+    public static ArrayList<Object> getListeCustomersObj() {
+        ArrayList<Object> arrObj = new ArrayList<>();
 
+        for (User userIn : listeUsers) {
+            if (userIn instanceof Client) {
+                arrObj.add((Object) userIn);
+            }
+        }
+
+        return arrObj;
+    }
+
+    public static ArrayList<Object> getListeAdvisorsObj() {
+        ArrayList<Object> arrObj = new ArrayList<>();
+
+        for (User userIn : listeUsers) {
+            if (userIn instanceof Conseiller) {
+                arrObj.add((Object) userIn);
+            }
+        }
+
+        return arrObj;
+    }
 
 
 }

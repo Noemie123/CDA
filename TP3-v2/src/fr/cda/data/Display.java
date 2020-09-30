@@ -13,6 +13,7 @@ public class Display {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("1. Client ?");
         System.out.println("2. Conseiller ?");
+        System.out.println("3. Save & Print");
 
         String chosenNumberString = myObj.next(); // receiving user answer in String
         Integer chosenNumber = null;
@@ -24,10 +25,17 @@ public class Display {
             System.out.println("Veuillez renseigner un nombre.");
         }
 
-        if (chosenNumber != null) { // if user answer is an Integer
-            if (chosenNumber == 1 || chosenNumber == 2) {
-                return chosenNumber;
+        if (chosenNumber != null && chosenNumber > 0 && chosenNumber < 4) { // if user answer is an Integer
+            switch (chosenNumber) {
+                case 1:
+                    System.out.println("Vous avez choisi Client");
+                    break;
+                case 2:
+                    System.out.println("Vous avez choisi Conseiller");
             }
+
+                return chosenNumber;
+
         }
 
         return displayUserTypeMenu(); // recursive

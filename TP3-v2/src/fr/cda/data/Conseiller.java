@@ -1,9 +1,9 @@
 package fr.cda.data;
 
-import java.util.ArrayList;
-import java.util.Scanner;
 
-public class Conseiller extends User {
+import java.io.Serializable;
+
+public class Conseiller extends User implements Serializable {
 
     /**************************
      *                        *

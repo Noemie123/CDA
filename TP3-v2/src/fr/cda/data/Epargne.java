@@ -1,6 +1,8 @@
 package fr.cda.data;
 
-public class Epargne extends Compte {
+import java.io.Serializable;
+
+public class Epargne extends Compte implements Serializable {
 
     /**************************
      *                        *

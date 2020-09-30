@@ -1,9 +1,10 @@
 package fr.cda.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class Compte {
+
+public class Compte implements Serializable {
 
     /**************************
      *                        *

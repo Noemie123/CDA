@@ -1,8 +1,9 @@
 package fr.cda.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Client extends User {
+public class Client extends User implements Serializable {
 
     /**************************
      *                        *
@@ -19,7 +20,7 @@ public class Client extends User {
      *                        *
      **************************/
 
-    public Client (String surname, String firstname, String identifiant, String mdp ) {
+    public Client (String surname, String firstname, String identifiant, String mdp) {
         super(surname, firstname, identifiant, mdp);
     }
 
