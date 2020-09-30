@@ -25,6 +25,13 @@ public class Client extends User implements Serializable {
     }
 
 
+    public String toString() {
+        return surname + " " + firstname + ", id : " + identifiant + ", nb de comptes : " + listeComptesClient.size();
+    }
+
+
+
+
     public ArrayList<Compte> getListeComptesClient() {
         return listeComptesClient;
     }

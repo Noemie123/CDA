@@ -38,6 +38,13 @@ public class Compte implements Serializable {
     }
 
 
+    public String toString() {
+        return "Compte " + (this instanceof Courant ? "courant" : "épargne") + " n°" + code + ", solde : " + solde + ", activé : " + (activated? "oui" : "non") + ", appartenant à : " + owner.getFirstname() + " " + owner.getSurname();
+    }
+
+
+
+
 
 
     /**************************

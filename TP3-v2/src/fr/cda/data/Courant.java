@@ -11,7 +11,7 @@ public class Courant extends Compte implements Serializable  {
      *                        *
      **************************/
 
-    protected Double decouvert;
+    private Double decouvert;
 
 
 

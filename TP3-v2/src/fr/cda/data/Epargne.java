@@ -10,7 +10,7 @@ public class Epargne extends Compte implements Serializable {
      *                        *
      **************************/
 
-    protected Double tauxInteret;
+    private Double tauxInteret;
 
 
 

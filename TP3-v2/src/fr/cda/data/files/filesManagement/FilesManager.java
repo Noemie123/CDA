@@ -21,7 +21,7 @@ public class FilesManager {
             }
 
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.getSuppressed();
         }
     }
 
@@ -49,7 +49,7 @@ public class FilesManager {
 
         } catch (Exception e) {
             finish = true;
-//            e.printStackTrace();
+            e.getSuppressed();
         }
 
         return arrObject;

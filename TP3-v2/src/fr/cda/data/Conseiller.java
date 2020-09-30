@@ -15,4 +15,11 @@ public class Conseiller extends User implements Serializable {
         super(surname, firstname, identifiant, mdp);
     }
 
+
+
+
+    public String toString() {
+        return surname + " " + firstname + ", id : " + identifiant;
+    }
+
 }

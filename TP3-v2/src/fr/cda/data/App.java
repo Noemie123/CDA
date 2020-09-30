@@ -14,30 +14,41 @@ public class App {
             ArrayList<Object> arrComptesObject = Banque.getListeComptesObj();
             FilesManager.writeDownAll("comptes", arrComptesObject);
 
+            // displaying results after reading for accounts
             ArrayList<Object> arrComptesObjectReceived = FilesManager.readAll("comptes");
             if (!arrComptesObjectReceived.isEmpty()) {
+                System.out.println("Liste des comptes : ");
                 for (Object comptesIn : arrComptesObjectReceived) {
                     Compte compte = (Compte) comptesIn;
-                    System.out.println("Compte n°" + compte.code);
+                    System.out.println(compte.toString());
                 }
+
             } else {
                 System.out.println("Liste comptes vide.");
             }
+
+            System.out.println("--------------------\n");
+
 
 
             // write & read for customers
             ArrayList<Object> arrClientsObj = Banque.getListeCustomersObj();
             FilesManager.writeDownAll("clients", arrClientsObj);
 
+            // displaying results after reading for customers
             ArrayList<Object> arrCustomersObjectReceived = FilesManager.readAll("clients");
             if (!arrCustomersObjectReceived.isEmpty()) {
+                System.out.println("Liste des clients : ");
                 for (Object customersIn : arrCustomersObjectReceived) {
                     Client clientIn = (Client) customersIn;
-                    System.out.println("Nom du client : " + clientIn.firstname + " " + clientIn.surname);
+                    System.out.println(clientIn.toString());
                 }
+
             } else {
                 System.out.println("Liste clients vide.");
             }
+
+            System.out.println("--------------------\n");
 
 
 
@@ -46,18 +57,23 @@ public class App {
             ArrayList<Object> arrAdvisorsObj = Banque.getListeAdvisorsObj();
             FilesManager.writeDownAll("conseillers", arrAdvisorsObj);
 
+            // displaying results after reading for advisors
             ArrayList<Object> arrAdvisorsObjectReceived = FilesManager.readAll("conseillers");
             if (!arrAdvisorsObjectReceived.isEmpty()) {
+                System.out.println("Liste des conseillers : ");
                 for (Object advisorsIn : arrAdvisorsObjectReceived) {
                     Conseiller conseillerIn = (Conseiller) advisorsIn;
-                    System.out.println("Nom du conseiller " + conseillerIn.firstname + " " + conseillerIn.surname);
+                    System.out.println(conseillerIn.toString());
                 }
             } else {
                 System.out.println("Liste conseillers vide.");
             }
-
+            System.out.println("--------------------\n");
             App.run();
         }
+
+
+
 
         Integer createConnectChoice = Display.displayCreateConnect(); // select create user account or connect
 

@@ -68,6 +68,8 @@ public class Display {
             }
 
             return displayCreateConnect(); // recursive
+        } else {
+            App.run();
         }
 
         return displayUserTypeMenu();
