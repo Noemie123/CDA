@@ -10,5 +10,7 @@ POO : driver licence / Insurance calculation
 POO : Bank w/ accounts
 
 ## TP3-v2 -- Bank
-POO : Bank w/ accounts
-(Redoing from scratch & optimizing)
+POO : Bank w/ accounts and user types
+
+## TP3 - v3 -- Bank
+POO : Bank w/ accounts, user types and using external files to save
