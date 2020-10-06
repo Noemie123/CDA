@@ -10,8 +10,12 @@ public class App {
         Integer userType = Display.displayUserTypeMenu(); // select type of user menu
 
         if (userType == 3) {
+
             // write & read for accounts
             ArrayList<Object> arrComptesObject = Banque.getListeComptesObj();
+            if (arrComptesObject.isEmpty()) {
+                System.out.println("Liste de comptes vides avant écriture.");
+            }
             FilesManager.writeDownAll("comptes", arrComptesObject);
 
             // displaying results after reading for accounts
@@ -21,6 +25,12 @@ public class App {
                 for (Object comptesIn : arrComptesObjectReceived) {
                     Compte compte = (Compte) comptesIn;
                     System.out.println(compte.toString());
+
+                    // displaying list of operation for each account
+                    for (Operations op : compte.getOperationsArrayList()) {
+                        System.out.println("Op n°" + op.getNumero() + " - " + op.getType() + " : " + op.getMontant() + "€");
+                    }
+                    System.out.println("--\n");
                 }
 
             } else {
@@ -33,6 +43,9 @@ public class App {
 
             // write & read for customers
             ArrayList<Object> arrClientsObj = Banque.getListeCustomersObj();
+            if (arrClientsObj.isEmpty()) {
+                System.out.println("Liste de clients vides avant écriture.");
+            }
             FilesManager.writeDownAll("clients", arrClientsObj);
 
             // displaying results after reading for customers
@@ -55,6 +68,9 @@ public class App {
 
             // write & read for advisors
             ArrayList<Object> arrAdvisorsObj = Banque.getListeAdvisorsObj();
+            if (arrAdvisorsObj.isEmpty()) {
+                System.out.println("Liste de conseillers vides avant écriture.");
+            }
             FilesManager.writeDownAll("conseillers", arrAdvisorsObj);
 
             // displaying results after reading for advisors

@@ -15,6 +15,7 @@ public class FilesManager {
             FileOutputStream file = new FileOutputStream(pathAndName);
             ObjectOutputStream objectOutput = new ObjectOutputStream(file);
 
+
             // loop to write down
             for (Object obj : arrayObj) {
                 objectOutput.writeObject(obj);

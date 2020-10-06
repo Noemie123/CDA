@@ -1,10 +1,11 @@
 package fr.cda.data;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 
-public class Operations {
+
+public class Operations implements Serializable {
 
     /**************************
      *                        *
@@ -44,6 +45,9 @@ public class Operations {
      *                        *
      **************************/
 
+    public Integer getNumero() {
+        return numero;
+    }
 
     public String getDate() {
         return date;
