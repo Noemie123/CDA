@@ -14,3 +14,8 @@ POO : Bank w/ accounts and user types
 
 ## TP3 - v3 -- Bank
 POO : Bank w/ accounts, user types and using external files to save
+TBC
+
+## TP3 - v4 -- Bank
+POO : Bank w/ accounts, user types and using external files to save
+UPDATING WHEN CLOSING THE APP
