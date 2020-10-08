@@ -18,4 +18,4 @@ TBC
 
 ## TP3 - v4 -- Bank
 POO : Bank w/ accounts, user types and using external files to save
-UPDATING WHEN CLOSING THE APP
+UPDATING WHEN CLOSING THE APP / LOADING WHEN LAUNCHING
