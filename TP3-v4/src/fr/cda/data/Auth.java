@@ -110,7 +110,7 @@ public class Auth {
 
         // if exists
         if (indexUser != -1) {
-            Banque.currentUser = Banque.listeUsers.get(indexUser);
+            Banque.setCurrentUser(Banque.listeUsers.get(indexUser));
 
             // if correct type
             if ((Banque.currentUser instanceof Client && userType == 1) || (Banque.currentUser instanceof Conseiller && userType == 2)) {

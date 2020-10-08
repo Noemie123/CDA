@@ -11,7 +11,7 @@ public class Client extends User implements Serializable {
      *                        *
      **************************/
 
-    protected ArrayList<Compte> listeComptesClient = new ArrayList<>();
+//    protected ArrayList<Compte> listeComptesClient = new ArrayList<>();
 
 
     /**************************
@@ -26,13 +26,13 @@ public class Client extends User implements Serializable {
 
 
     public String toString() {
-        return surname + " " + firstname + ", id : " + identifiant + ", nb de comptes : " + listeComptesClient.size();
+        return surname + " " + firstname + ", id : " + identifiant;
     }
 
 
 
 
-    public ArrayList<Compte> getListeComptesClient() {
-        return listeComptesClient;
-    }
+//    public ArrayList<Compte> getListeComptesClient() {
+//        return listeComptesClient;
+//    }
 }

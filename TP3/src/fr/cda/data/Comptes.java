@@ -10,7 +10,6 @@ public class Comptes {
     protected String code;
     protected Double solde;
     protected Integer type;
-    protected Integer indexUser;
 
 //    protected ArrayList<Comptes> comptesArrayList = new ArrayList();
     protected ArrayList<Operations> operationsArrayList = new ArrayList<>();
@@ -19,12 +18,9 @@ public class Comptes {
     /**
      * Constructor
      */
-    public Comptes (String code, Double solde, Integer type, Integer indexUser) {
+    public Comptes (String code, Double solde) {
         this.code = code;
         this.solde = solde;
-        this.type = type;
-        this.indexUser = indexUser;
-
 //        comptesArrayList.add(this);
     }
 
@@ -64,19 +60,12 @@ public class Comptes {
         this.type = type;
     }
 
-    public Integer getIndexUser() {
-        return indexUser;
-    }
 
-    public void setIndexUser(Integer indexUser) {
-        this.indexUser = indexUser;
-    }
 
     /**
      * Method to create a new account with a code and a type - recursive
      */
-    public static void createAccount(Integer indexUser, ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants, ArrayList<Epargnes> arrayComptesEpargnes ) {
-
+    public static void createAccount(ArrayList<Comptes> arrayComptes, ArrayList<Courants> arrayComptesCourants, ArrayList<Epargnes> arrayComptesEpargnes ) {
         Scanner myObj = new Scanner(System.in);
         System.out.println("N° du compte");
         String codeCompte = myObj.next();
@@ -88,15 +77,17 @@ public class Comptes {
             Integer userChoice = myObj.nextInt();
 
             if (userChoice == 1) {
-                Courants compteCourant = new Courants(codeCompte, 0.0, userChoice, indexUser, -150.0);
+                Courants compteCourant = new Courants(codeCompte, 0.0, -150.0);
+                compteCourant.setType(userChoice);
                 arrayComptesCourants.add(compteCourant);
                 arrayComptes.add(compteCourant);
             } else if (userChoice == 2) {
-                Epargnes compteEpargne = new Epargnes(codeCompte, 0.0, userChoice , indexUser,2.5);
+                Epargnes compteEpargne = new Epargnes(codeCompte, 0.0, 2.5);
+                compteEpargne.setType(userChoice);
                 arrayComptesEpargnes.add(compteEpargne);
                 arrayComptes.add(compteEpargne);
             } else {
-                createAccount(indexUser, arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
+                createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
             }
 
             Scanner myObj2 = new Scanner(System.in);
@@ -104,11 +95,11 @@ public class Comptes {
             String continueAnswer = myObj2.nextLine();
 
             if (continueAnswer.equals("o")) {
-                createAccount(indexUser, arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
+                createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
             }
         } else {
             System.out.println("Le compte existe déjà.");
-            createAccount(indexUser, arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
+            createAccount(arrayComptes, arrayComptesCourants, arrayComptesEpargnes);
         }
 
     }

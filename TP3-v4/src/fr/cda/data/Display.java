@@ -1,5 +1,6 @@
 package fr.cda.data;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -36,9 +37,11 @@ public class Display {
                         break;
                 }
 
+
             } else if (chosenNumber == 3) {
                 System.out.println("Vous pouvez fermer l'application.");
             }
+
             return chosenNumber;
         }
 
@@ -85,10 +88,10 @@ public class Display {
      * Method to display list of accounts according to type of current user
      */
     private static void displayListeCompte(Integer userType, User connectedUser) {
-        ArrayList<Compte> listeDesComptes;
+        ArrayList<Compte> listeDesComptes = new ArrayList<>();
 
         if (connectedUser instanceof Client) { // if user is a customer - select only his accounts
-            listeDesComptes = ((Client) connectedUser).listeComptesClient;
+            listeDesComptes = Finder.findCustomerActivatedAccount((Client) connectedUser);
         } else {
             listeDesComptes = Banque.getListeComptes();
         }
@@ -99,7 +102,9 @@ public class Display {
         } else { // if there are accounts to display
             for (Compte compteUnit : listeDesComptes) {
                 if (compteUnit instanceof Epargne) {
-                    compteUnit.setSolde(compteUnit.getSolde() + (((Epargne) compteUnit).getTauxInteret() * compteUnit.getSolde())); // changing account balance - adding interest rate amount
+                    Double soldePrev = compteUnit.getSolde();
+                    Double soldeAfter = (double) Math.round((soldePrev + ((soldePrev*((Epargne) compteUnit).getTauxInteret())/100))*100)/100;
+                    compteUnit.setSolde(soldeAfter); // changing account balance - adding interest rate amount
                 }
                 User accountOwner = compteUnit.owner; // finding object User of the owner of the account
 
@@ -142,8 +147,8 @@ public class Display {
 
         if (userChoice != null) { // if user answer is an Integer
 
-            // if connected user is a customer but have not created an account yet
-            if (userChoice != 0 && userChoice != 1 && connectedUser instanceof Client && (((Client) connectedUser).listeComptesClient.isEmpty())) {
+            // if connected user is a customer but have not created an account yet or not activated
+            if (userChoice != 0 && userChoice != 1 && connectedUser instanceof Client && Finder.findCustomerActivatedAccount((Client) connectedUser).size() < 1) {
                 System.out.println("Vous n'avez aucun compte actif. Veuillez en créer un ou attendre que votre conseiller accède à votre demande.");
             } else {
                 switch (userChoice) {
@@ -246,13 +251,13 @@ public class Display {
      */
     public static void displayOperationAmount(Integer typeDisplay, Integer typeUser, User connectedUser) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        System.out.println("Entrez le n° du compte pour afficher le montant des versements.");
+        System.out.println("Entrez le n° du compte pour afficher le montant des operations.");
 
         String accountCode = myObj.next();
         Integer indexCompteChoisi = Finder.findIndexCompte(accountCode);
 
         // if account exists + user is advisor OR user is customer and the account is his
-        if (indexCompteChoisi != -1 && (typeUser == 2 || (typeUser == 1 && (Banque.getListeComptes().get(indexCompteChoisi).getOwner().equals(connectedUser))))) {
+        if (indexCompteChoisi != -1 && (typeUser == 2 || (typeUser == 1 && (Banque.getListeComptes().get(indexCompteChoisi).getOwner().getIdentifiant().equals(connectedUser.getIdentifiant()))))) {
             Compte compteChoisi = Banque.getListeComptes().get(indexCompteChoisi);
             Double amountVersement = 0.0;
             Double amountRetrait = 0.0;
@@ -268,7 +273,7 @@ public class Display {
             }
 
             if (amountVersement != 0) {
-                System.out.println("Le montant des versements et de " + amountVersement + " €.\n");
+                System.out.println("Le montant des versements est de " + amountVersement + " €.\n");
             } else if (typeDisplay != 2){
                 System.out.println("Aucun versement à afficher.\n");
             }
@@ -285,7 +290,7 @@ public class Display {
             }
 
             if (amountRetrait != 0) {
-                System.out.println("Le montant des retraits et de " + amountRetrait + " €.\n");
+                System.out.println("Le montant des retraits est de " + amountRetrait + " €.\n");
             } else if (typeDisplay !=1) {
                 System.out.println("Aucun retrait à afficher.\n");
             }

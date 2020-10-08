@@ -64,10 +64,10 @@ public class Banking {
 
                                 if (accountType == 1) { // if account is current account
                                     Courant compteCourant = new Courant(codeCompte, soldeCompte, false, connectedUser, -150.0);
-                                    ((Client)connectedUser).getListeComptesClient().add(compteCourant);
+
                                 } else { // if account is savings account
                                     Epargne compteEpargne = new Epargne(codeCompte, soldeCompte, false, connectedUser, 2.50);
-                                    ((Client)connectedUser).getListeComptesClient().add(compteEpargne);
+
                                 }
 
                             }
@@ -96,14 +96,13 @@ public class Banking {
         System.out.println("N° du compte (0 pour arrêter)");
         String numeroCompteChoisi = myObj.next();
 
-
         if (!numeroCompteChoisi.equals("0")) {
-            Integer indexCompteChoisi = Finder.findIndexCompte(numeroCompteChoisi, connectedUser); // index in user's own array of accounts
+            Integer indexCompteChoisi = Finder.findIndexCompte(numeroCompteChoisi); // index in user's own array of accounts
 
 
             if (indexCompteChoisi != -1) { // if account exists
                 // if account was activated beforehand
-                if (!((Client)connectedUser).getListeComptesClient().get(indexCompteChoisi).isActivated()) {
+                if (!Banque.getListeComptes().get(indexCompteChoisi).isActivated()) {
                     System.out.println("Compte indisponible.");
                 } else {
 
@@ -120,7 +119,7 @@ public class Banking {
                     }
 
                     if (montantVersement != null) { // if user answer is a Double
-                        Compte compteChoisi = ((Client)connectedUser).getListeComptesClient().get(indexCompteChoisi); // index of the connected user array of accounts
+                        Compte compteChoisi = Banque.getListeComptes().get(indexCompteChoisi); // index of the connected user array of accounts
                         Double soldePrecedent = compteChoisi.getSolde();
                         compteChoisi.setSolde(soldePrecedent + montantVersement);
                         Double nouveauSolde = compteChoisi.getSolde();
@@ -148,11 +147,11 @@ public class Banking {
         String numeroCompteChoisi = myObj.next();
 
         if (!numeroCompteChoisi.equals("0")) {
-            Integer indexCompteChoisi = Finder.findIndexCompte(numeroCompteChoisi, connectedUser); // index in user's own array of accounts
+            Integer indexCompteChoisi = Finder.findIndexCompte(numeroCompteChoisi); // index in user's own array of accounts
 
             if (indexCompteChoisi != -1) {// if account exists
                 // if account was activated beforehand
-                if (!((Client)connectedUser).getListeComptesClient().get(indexCompteChoisi).isActivated()) {
+                if (!Banque.getListeComptes().get(indexCompteChoisi).isActivated()) {
                     System.out.println("Compte indisponible.");
                 } else {
 
@@ -169,7 +168,7 @@ public class Banking {
                     }
 
                     if (montantRetrait != null) { // if user answer is a Double
-                        Compte compteChoisi = ((Client)connectedUser).getListeComptesClient().get(indexCompteChoisi); // index of the connected user array of accounts
+                        Compte compteChoisi = Banque.getListeComptes().get(indexCompteChoisi); // index of the connected user array of accounts
                         Double soldePrecedent = compteChoisi.getSolde();
 
 
@@ -211,7 +210,7 @@ public class Banking {
 
 
             // if account exists and account is the user's account (if user is customer) and if account was activated beforehand
-            if (indexCompteChoisi == -1 || (typeUser == 1 && !Banque.getListeComptes().get(indexCompteChoisi).getOwner().equals(connectedUser)) || !Banque.getListeComptes().get(indexCompteChoisi).isActivated()) {
+            if (indexCompteChoisi == -1 || (typeUser == 1 && !Banque.getListeComptes().get(indexCompteChoisi).getOwner().getIdentifiant().equals(connectedUser.getIdentifiant())) || !Banque.getListeComptes().get(indexCompteChoisi).isActivated()) {
                 System.out.println("Compte introuvable.");
             } else {
                 System.out.println("N° du compte 2 (à créditer)");
@@ -279,6 +278,7 @@ public class Banking {
             for (Compte compt : listeDesComptes) {
                 if (compt.getCode().equals(accountCode)) {
                     found = true;
+                    Client custom = (Client) Banque.listeUsers.get(Finder.findIndexUser(compt.owner.getIdentifiant()));
                     if (!compt.isActivated()) {
                         compt.setActivated(true);
                         System.out.println("Le compte n°" + accountCode + " a été activé");

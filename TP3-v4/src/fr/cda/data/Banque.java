@@ -26,6 +26,9 @@ public class Banque {
         return listeComptes;
     }
 
+    public static void setCurrentUser(User currentUser) {
+        Banque.currentUser = currentUser;
+    }
 
     public static void setListeComptes(ArrayList<Compte> listeComptes) {
         Banque.listeComptes = listeComptes;

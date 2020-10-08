@@ -9,6 +9,7 @@ public class App {
     public static void run() {
         Integer userType = Display.displayUserTypeMenu(); // select type of user menu
 
+
         if (userType == 3) {
 
             // write for accounts
@@ -25,6 +26,7 @@ public class App {
             ArrayList<Object> arrAdvisorsObj = Banque.getListeAdvisorsObj();
             FilesManager.writeDownAll("conseillers", arrAdvisorsObj);
 
+            App.run();
         }
 
 
@@ -44,6 +46,8 @@ public class App {
             if (connected) { // if connection is okay
                 System.out.println("Connecté");
                 User userConnected = Banque.currentUser;
+
+                System.out.println(userConnected.getIdentifiant());
 
                 if (userType == 1) {  // if user is a customer
                     Display.displayCustomerMenu(userConnected);
