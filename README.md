@@ -1,21 +1,21 @@
 # CDA
 
-## TP1 -- Algo
+## Algo
 Algo : exo & games
 
-## TP2 -- Insurance
+## Insurance
 POO : driver licence / Insurance calculation
 
-## TP3 -- Bank
+## Bank-v1
 POO : Bank w/ accounts
 
-## TP3-v2 -- Bank
-POO : Bank w/ accounts and user types
+## Bank-v2
+POO : Bank w/ accounts and user types (external files saving but not used)
 
-## TP3 - v3 -- Bank
+## Bank-v3
 POO : Bank w/ accounts, user types and using external files to save
 TBC
 
-## TP3 - v4 -- Bank
+## Bank-v4
 POO : Bank w/ accounts, user types and using external files to save
 UPDATING WHEN CLOSING THE APP / LOADING WHEN LAUNCHING
