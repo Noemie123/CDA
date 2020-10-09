@@ -1,8 +1,7 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 
 public class TicTacToe implements MouseListener {
@@ -24,6 +23,20 @@ public class TicTacToe implements MouseListener {
     private JButton caseSeven;
     private JButton caseEight;
     private JButton caseNine;
+
+    private ArrayList<String> arrNumbers = new ArrayList<>() {
+        {
+            add("1");
+            add("2");
+            add("3");
+            add("4");
+            add("5");
+            add("6");
+            add("7");
+            add("8");
+            add("9");
+        }
+    };
 
 
     public TicTacToe() {
@@ -71,6 +84,7 @@ public class TicTacToe implements MouseListener {
     }
 
     public TicTacToe(Integer intOne) {
+
         panel = new JPanel();
 
         panel.setLayout(null);
@@ -132,8 +146,53 @@ public class TicTacToe implements MouseListener {
 
 
         frame.setVisible(true);
+
+
+
     }
 
+
+    public static ArrayList<String> checkGame(JButton caseOne, JButton caseTwo, JButton caseThree, JButton caseFour, JButton caseFive, JButton caseSix, JButton caseSeven, JButton caseEight, JButton caseNine) {
+        ArrayList<String> arrResult = new ArrayList<>();
+
+        if (caseOne.getText().equals(caseTwo.getText()) && caseTwo.getText().equals(caseThree.getText())) { // 1 - 2 -3
+            arrResult.add("true");
+            arrResult.add(caseOne.getText());
+        } else if (caseFour.getText().equals(caseFive.getText()) && caseFive.getText().equals(caseSix.getText())) { // 4 - 5 - 6
+            arrResult.add("true");
+            arrResult.add(caseFour.getText());
+        } else if (caseSeven.getText().equals(caseEight.getText()) && caseEight.getText().equals(caseNine.getText())) { // 6 - 7 - 8
+            arrResult.add("true");
+            arrResult.add(caseSeven.getText());
+        } else if (caseOne.getText().equals(caseFour.getText()) && caseFour.getText().equals(caseSeven.getText())) { // 1 - 4 - 7
+            arrResult.add("true");
+            arrResult.add(caseOne.getText());
+        } else if (caseTwo.getText().equals(caseFive.getText()) && caseFive.getText().equals(caseEight.getText())) { // 2 - 5 - 8
+            arrResult.add("true");
+            arrResult.add(caseTwo.getText());
+        } else if (caseThree.getText().equals(caseSix.getText()) && caseSix.getText().equals(caseNine.getText())) { // 3 - 6 - 9
+            arrResult.add("true");
+            arrResult.add(caseThree.getText());
+        } else if (caseOne.getText().equals(caseFive.getText()) && caseFive.getText().equals(caseNine.getText())) { // 1 - 5 - 9
+            arrResult.add("true");
+            arrResult.add(caseOne.getText());
+        } else if (caseThree.getText().equals(caseFive.getText()) && caseFive.getText().equals(caseSeven.getText())) { // 3 - 5 - 7
+            arrResult.add("true");
+            arrResult.add(caseThree.getText());
+        }
+
+        if (!caseOne.getText().equals("1") && !caseTwo.getText().equals("2") && !caseThree.getText().equals("3") && !caseFour.getText().equals("4") && !caseFive.getText().equals("5") && !caseSix.getText().equals("6") && !caseSeven.getText().equals("7") && !caseEight.getText().equals("8") && !caseNine.getText().equals("9")) {
+            arrResult.add("true");
+            arrResult.add("1");
+        }
+        if (arrResult.isEmpty()) {
+            arrResult.add("false");
+            arrResult.add("0");
+        }
+
+
+        return arrResult;
+    }
 
 
 
@@ -154,89 +213,149 @@ public class TicTacToe implements MouseListener {
         if(b != null)
             buttonText = b.getText();
 
-        int buttonClick = e.getButton();
+
+
 
         switch (buttonText) {
             case "Log in":
                 String userInput = userText.getText();
                 String pwordInput = String.valueOf(pwordText.getPassword());
 
-                if (userInput.equals("a") && pwordInput.equals("a")) {
-                    success.setText("LOG IN OK");
+                if (userInput.equals("nono") && pwordInput.equals("mdp")) {
+                    success.setText(userInput + ", vous êtes connecté !");
+                    success.setEnabled(false);
                     panel.add(success);
                     new TicTacToe(1);
                 } else {
-                    success.setText("not logged in!");
+                    success.setText("Mauvais identifiants !");
+                    success.setEnabled(false);
                     panel.add(success);
                 }
+
                 break;
             case "1" :
-                if (buttonClick == 1) {
+                if (!caseOne.getText().equals("O")) {
                     caseOne.setText("X");
-                } else if (buttonClick == 3) {
-                    caseOne.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             case "2" :
-                if (buttonClick == 1) {
+                if (!caseTwo.getText().equals("O")) {
                     caseTwo.setText("X");
-                } else if (buttonClick == 3) {
-                    caseTwo.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             case "3" :
-                if (buttonClick == 1) {
+                if (!caseThree.getText().equals("O")) {
                     caseThree.setText("X");
-                } else if (buttonClick == 3) {
-                    caseThree.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             case "4" :
-                if (buttonClick == 1) {
+                if (!caseFour.getText().equals("O")) {
                     caseFour.setText("X");
-                } else if (buttonClick == 3) {
-                    caseFour.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             case "5" :
-                if (buttonClick == 1) {
+                if (!caseFive.getText().equals("O")) {
                     caseFive.setText("X");
-                } else if (buttonClick == 3) {
-                    caseFive.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             case "6" :
-                if (buttonClick == 1) {
+                if (!caseSix.getText().equals("O")) {
                     caseSix.setText("X");
-                } else if (buttonClick == 3) {
-                    caseSix.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             case "7" :
-                if (buttonClick == 1) {
+                if (!caseSeven.getText().equals("O")) {
                     caseSeven.setText("X");
-                } else if (buttonClick == 3) {
-                    caseSeven.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             case "8" :
-                if (buttonClick == 1) {
+                if (!caseEight.getText().equals("O")) {
                     caseEight.setText("X");
-                } else if (buttonClick == 3) {
-                    caseEight.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             case "9" :
-                if (buttonClick == 1) {
+                if (!caseNine.getText().equals("O")) {
                     caseNine.setText("X");
-                } else if (buttonClick == 3) {
-                    caseNine.setText("O");
+                    arrNumbers.remove(findIndex(buttonText, arrNumbers));
                 }
                 break;
             default:
                 gameComments.setText("Déjà changé");
+                gameComments.setEnabled(false);
                 panel.add(gameComments);
         }
+
+
+
+        if (!buttonText.equals("Log in")) {
+            ArrayList<String> checkGame1 = checkGame(caseOne, caseTwo, caseThree, caseFour, caseFive, caseSix, caseSeven, caseEight, caseNine);
+            if (checkGame1.get(0).equals("false") && (!buttonText.equals("X") && !buttonText.equals("O"))) {
+                int pickIndex = computerPick(arrNumbers);
+                String computerPick = arrNumbers.get(pickIndex);
+
+                System.out.println(computerPick);
+
+                arrNumbers.remove(pickIndex);
+
+
+                if (computerPick.equals("1")) {
+                    caseOne.setText("O");
+                } else if (computerPick.equals("2")) {
+                    caseTwo.setText("O");
+                } else if (computerPick.equals("3")) {
+                    caseThree.setText("O");
+                } else if (computerPick.equals("4")) {
+                    caseFour.setText("O");
+                } else if (computerPick.equals("5")) {
+                    caseFive.setText("O");
+                } else if (computerPick.equals("6")) {
+                    caseSix.setText("O");
+                } else if (computerPick.equals("7")) {
+                    caseSeven.setText("O");
+                } else if (computerPick.equals("8")) {
+                    caseEight.setText("O");
+                } else {
+                    caseNine.setText("O");
+                }
+
+
+
+            }
+
+
+
+
+            ArrayList<String> checkGame = checkGame(caseOne, caseTwo, caseThree, caseFour, caseFive, caseSix, caseSeven, caseEight, caseNine);
+            if (checkGame.get(0).equals("true")) {
+                caseOne.setEnabled(false);
+                caseTwo.setEnabled(false);
+                caseThree.setEnabled(false);
+                caseFour.setEnabled(false);
+                caseFive.setEnabled(false);
+                caseSix.setEnabled(false);
+                caseSeven.setEnabled(false);
+                caseEight.setEnabled(false);
+                caseNine.setEnabled(false);
+                if (checkGame.get(1).equals("1")) {
+                    gameComments.setText("Personne n'a gagné.");
+                } else {
+                    gameComments.setText(checkGame.get(1) + " a gagné.");
+                }
+            }
+            gameComments.setEnabled(false);
+            panel.add(gameComments);
+        }
+
+
+
 
     }
 
@@ -259,4 +378,22 @@ public class TicTacToe implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
+    public static int computerPick(ArrayList<String> arrNumbers) {
+
+        Integer max = arrNumbers.size()-1;
+        return (int) Math.floor (Math.random()* (max + 1));
+
+    }
+
+    public static int findIndex(String pickedStr, ArrayList<String> arrNumbers) {
+        for (int i = 0; i < arrNumbers.size(); i++) {
+            if (pickedStr.equals(arrNumbers.get(i))) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
 }
